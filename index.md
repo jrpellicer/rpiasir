@@ -1,3 +1,6 @@
+---
+layout: default
+---
 # Estación Meteorológica
 
 Proyecto de estación meteorológica con NodeMCU, sensor DHT22 y Raspberry Pi
