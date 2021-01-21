@@ -7,5 +7,5 @@ links:
     - Name: Inicio
       url: /
     - Name: Página 2
-      pagina2.md
+      url: pagina2.md
     
