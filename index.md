@@ -2,153 +2,48 @@
 layout: page
 title: Inicio
 ---
-# Estación Meteorológica
+# La Raspberry Pi en el aula de 1º de ASIR
+Esta es una recopilación de pequeños proyectos para realizar en el aula de 1º del CFGS de ASIR con Raspberry Pi en los que se ven contenidos de manera transversal, o si se prefiere al revés, son proyectos en los que se ven contenidos de 1º de ASIR mientras se ve Linux en una Raspberry Pi de manera transversal. El objetivo final es aprender contenidos mientras se aprende Linux jugando con una Raspberry Pi.
 
-Proyecto de estación meteorológica con NodeMCU, sensor DHT22 y Raspberry Pi
+## A quién va dirigido este documento
+Como profesor técnico de FP de ASIR me encuentro todos los años con alumnos a los que les cuesta mucho incorporar el sistema operativo Linux a su vida cotidiana. La mayoría de los alumnos que entran en primero no han trabajado nunca con este sistema, y los que lo han hecho son alumnos que han cursado previamente el ciclo medio de SMR y que, a su vez, muestran ciertos reparos (en general) a trabajar con Linux.
 
-## Objetivo del proyecto
+Durante años estoy impartiendo la asignatura de primer curso de Implantación de Sistemas Operativos, en la que después de pasar por Windows 10 y Windows Server, estudiamos Linux partiendo desde cero y profundizando todo lo que el tiempo y el denso temario nos permite. Soy consciente todos los años de que, a pesar de las prácticas que hacemos, no son suficientes para que los alumnos se desenvuelvan con naturalidad en Linux durante el segundo curso. Es necesario que en otros módulos de primero se refuerce el trabajo con Linux de manera transversal para que los alumnos hagan una inmersión.
 
-Creación de una estación meteorológica conectada a la red con la posibilidad de acceder a sus datos remotamente vía web. Para ello, se implementa un pequeño sistema IoT doméstico con sensores de temperatura y humedad conectados por wifi, que almacena las lecturas obtenidas en una base de datos ubicada en una Raspberry Pi y que a su vez también actúa de servidor web.
+Puesto que conocía la Raspberry Pi y el potencial que ofrece, y me parecía un “juguete” ideal para aprender jugando, decidí sacar una lista de posibles proyectos atractivos para los alumnos con la Raspberry Pi para desarrollar en clase, pero no en el módulo de Implantación de Sistemas Operativos, sino en un módulo que, en mi opinión, se presta más a desarrollar otros contenidos mientras se ve Linux de manera transversal como es el de Fundamentos del Hardware. Así que, durante el segundo y tercer trimestre de este curso pasado, me lancé con ese módulo a trabajar en clase con la Raspberry Pi; a que conocieran DAS, SAN y NAS de primera mano, a que crearan una nube privada o vieran la virtualización a nivel de sistema operativo en un miniordenador de bajo costo como si de un potente servidor se tratara.
 
-El paso de los datos desde el sensor hasta la Raspberry Pi se hace mediante el protocolo MQTT. Los mensajes MQTT recibidos vía WiFi en la Raspberry se procesan mediante Node-RED y se almacenan en una BBDD MySQL, estando disponibles para ser accedidos por el servidor web Apache también ubicado en la Raspberry Pi.
+Este documento va dirigido a aquellos profesores que deseen incorporar la Raspberry Pi en sus proyectos de clase, especialmente a los de primer curso del ciclo de ASIR en la que los alumnos se desenvolverán desde el minuto 1 con un sistema Linux en la que tendrán que tocar la configuración de la red, acceder a su router doméstico, escanear IPs, conectarse por SSH con certificados de clave pública, ejecutar un programa Python, administrar usuarios, permisos, contenedores, etc. En resumen, trabajar con un servidor real de unos 40€.
+Por supuesto está dirigido a todo aquel maker que desee hacer pequeños proyectos DIY de informática doméstica y conocer todas las posibilidades que ofrece la Raspberry Pi y su ecosistema, e incluso combinándola con Arduino y otras placas con microcontroladores.
 
-Todos los servicios aojados en la Raspberry Pi están contenerizados con Docker.
+## Marco de los proyectos
+Como he dicho, los proyectos los he diseñado para trabajar en el aula (y/o en casa) enmarcados dentro del módulo de Fundamentos del Hardware de primero de ASIR. Considero que muchos de ellos se ajustan, como complemento a los apuntes teóricos, a los contenidos que el currículum enumera en este módulo. Es cierto que también hay muchos de los contenidos del módulo de Implantación de Sistemas Operativos que se relacionan directamente con los proyectos que aquí se enumeran, pero es el módulo de Fundamentos del Hardware el idóneo para desarrollarlos por la amplitud de sus contenidos.
 
-## Elementos necesarios
+También es cierto que en algunos de los proyectos se tocan contenidos de módulos de segundo, pero del modo que se ven no considero que haya colisión ni que sea mayor problema el haberlos visto, sino al contrario, una ventaja que estén familiarizados.
 
-Por un lado está el dispositivo IoT que se encarga de medir y enviar vía WiFi los datos de temperatura y humedad; y por otro lado el servidor que se encarga de recibir esos datos, procesarlos, almacenarlos y servirlos vía web.
+## Objetivos de los proyectos
+Para cada uno de los proyectos que se detallan en este documento se han establecido los siguientes objetivos:
+- **Puesta en marcha de la Raspberry Pi:** El objetivo de este proyecto es conocer la arquitectura del equipo, decidir la versión del sistema operativo, e instalarlo mediante el flasheado de la tarjeta. Una vez instalado habrá que administrar usuarios y grupos locales, configurar el protocolo TCP/IP y acceder al sistema por SSH para administrarlo remotamente.
+- **Los puertos GPIO:** Con este proyecto conoceremos el hardware de la Raspberry Pi y los elementos de conexión y ampliación del sistema mediante los puertos GPIO.
+- **Docker:** Aprenderemos cómo funciona la virtualización a nivel de sistema operativo y a trabajar con herramientas de virtualización con contenedores.
+- **Owncloud:** En este proyecto el objetivo es conocer el Cloud computing y el almacenamiento en la nube (StaaS). Crearemos una nube privada de almacenamiento y aprenderemos a instalar y probar aplicaciones mediante repositorios y mediante contenedores.
+- **Disco DAS:** Aquí vamos a conocer los sistemas de almacenamiento y los modos de conexión de discos. Conectaremos un disco duro externo por un puerto USB, trabajaremos con sistemas de archivos mediante comandos y veremos cómo administrar discos, particiones y volúmenes. 
+- **Disco NAS con OMV:** En este caso la conexión del disco será también mediante USB pero para proporcionar una conexión NAS a otros equipos. Para ello veremos cómo instalar una aplicación, trabajaremos con sistemas de archivos mediante herramientas gráficas (un entorno Web), crearemos un servidor de archivos con un sistema NAS, administrando el acceso a recursos con SAMBA/CIFS y accederemos a los recursos compartidos desde una máquina Windows.
+- **Disco NAS con SMB:** Al igual que en el anterior proyecto crearemos un disco NAS pero en este caso utilizaremos el protocolo SMB/CIFS mediante comandos. Veremos cómo gestionar permisos de red y permisos locales y modificaremos archivos de configuración del sistema. 
+- **Disco SAN:** El objetivo de este proyecto es conocer el modo de conexión de discos SAN en contraposición de los NAS y DAS de los proyectos anteriores. Crearemos un disco SAN y lo conectaremos a una máquina Windows por conexión iSCSI. 
+- **RAID de discos:** El objetivo es conectar 2 discos duros extraíbles y montar un sistema de discos RAID-0 y medir los tiempos de lectura/escritura.
+- **OCS Inventory:** Es necesario tener inventariado el hardware de los equipos que componen todo el sistema informático de una organización. Veremos cómo hacerlo mediante la instalación de  herramientas para el inventariado hardware automático o desatendido.
+- **Nagios:** Del mismo modo es necesario tener correctamente configurados y verificados los equipos mediante herramientas de chequeo y diagnóstico y monitorización. Nagios es una potente herramienta que podemos instalar en una Raspberry para centralizar la monitorización de nuestros servidores y equipos.
+- **Cluster de Docker Swarm:** Si en el proyecto de Docker vimos cómo trabajar con herramientas de virtualización, en este proyecto conoceremos las arquitecturas de alta disponibilidad, un orquestador de contenedores y cómo se montan estos ordenadores en bastidores o racks.
+- **Cluster de computación paralela:** Los mismos objetivos que en el proyacto anterior, pero esta vez aplicados a la computación en paralelo.
 
-Para el dispositivo IoT se utiliza una placa de desarrollo NodeMCU basada en el microcontrlador ESP8266 con tarjeta WiFi. A esa placa de desarrollo se conecta un sensor de temperatura y humedad DHT22.
+Para finalizar he incluido un proyecto integrador, de IoT con Arduino y Raspberry Pi, cuyos objetivos se escapan de los propuestos para alumnos de primer curso de ASIR, pero que sirve de ampliación para todos aquellos que deseen profundizar en los proyectos que se presentan en este documento o iniciarse en el IoT junto con Arduino. Consiste en la realización de una pequeña estación meteorológica en la que se hacen lecturas de temperatura y humedad y se almacenan los datos en una pequeña base de datos para después ser accedidos mediante una página web.
 
-El servidor es una Raspberry Pi con Raspbian instalado y configurado.
+## Material necesario
+Para desarrollar los proyectos se necesita que cada alumno cuente con una Raspberry Pi, junto con su tarjeta SD y su conector de alimentación. Opcionalmente se puede adquirir una carcasa para alojar la Raspberry Pi (con o sin refrigeración) y además un lector de tarjeta SD (o un adaptador similar) para poder conectarla al ordenador si éste no dispone de lector de tarjetas.
 
-Dispositivo cliente:
-- Placa NodeMCU v3 con ESP8266
-- NodeMCU Breadboard (opcional). Placa para facilitar la conexión entre el NodeMCU y los componentes.
-- Sensor DHT22. Sensor de temperatura y humedad.
-- Alimentador MicroUSB.
-- 3 Cables puente para conectar el sensor DHT22 al NodeMCU
+En algunos de los proyectos es necesario que se conecte un disco duro externo mediante un conector USB. Prácticamente todos los alumnos disponen de un disco duro externo para uso particular que podrían utilizar para la realización de estos proyectos.
 
-Servidor:
-- Raspberry Pi 4 model B.
-- Tarjeta SD.
-- Alimentador MicroUSB.
+Existen kits en el mercado de Raspberry Pi + Tarjeta + Conector + Cable HDMI + Carcasa por unos 80-90 €
+En nuestro caso el cable HDMI no va a ser necesario para la realización de ningún proyecto, pues nos conectaremos por terminal vía SSH a nuestro sistema.
 
-## Montaje de los componentes de la estación
-
-El NodeMCU trabaja con voltajes de 3,3v (a diferencia de Arduino que trabaja a 5v). Según el datasheet del DHT22, este sensor trabaja entre voltajes de 3,3V y 5,5V. El sensor tiene 3 patillas: una de alimentación, otra de tierra (GND) y la de datos. No es necesaria ninguna resistencia intermedia y se puede conectar directamente a la placa.
-
-El pin de alimentación (+) del sensor se conecta a uno de salida de 3,3V del NodeMCU, el de GND (-) a uno de GND, y por último, el pin central de datos se conecta a un pin GPIO de la placa. En este caso se ha conectado al **pin D2**. Es importante elegir bien el pin para la programación posterior de la placa.
-
-Aunque la placa trabaja a 3,3V, para alimentarla se puede utilizar un cargador microUSB de 5V, como los de cualquier móvil. La propia placa tiene un regulador de tensión en elpuerto USB que la baja a 3,3V.
-
-## Programación de la placa
-
-Para la programción del NodeMCU hay que configurar el IDE de Arduino indicando que la tarjeta a utilizar es la `NodeMCU 1.0 (ESP-12E Module)`.
-
-Para que aparezca esta tarjeta se debe instalar en el *Gestor de Tarjetas* la placa ESP8266.
-
-Si no apareciera este tipo de tarjeta, habría que modificar las *Preferencias* del IDE de Arduino y en el campo de *Gestor de URLs Adicionales de Tarjetas* introducir la siguiente URL: <https://arduino.esp8266.com/stable/package_esp8266com_index.json>
-
-Se compila el programa *estacion.ino* y se pasa a la placa.
-
-**Importante:**. En el programa *estacion.ino* hay que cambiar la dirección IP del Broker MQTT.
-
-## Preparación de la Raspberry Pi
-
-Es necesaria una Raspberry Pi con Raspbian configurado con una IP estática y Docker instalado.
-
-### Instalación del Broker MQTT
-
-El Broker a instalar en la Raspberry Pi es el Mosquitto. Existe en el Hub de Docker una versión válida para Raspberry:
-
-    docker run --name mosquitto -d -p 1883:1883 -p 9001:9001 eclipse-mosquitto
-
-El Topic a utilizar para enviar los datos desde el NodeMCU será:
-
-    casa/estacion/sensor1
-
-Pasando en el mismo mensaje la temperatura y la humedad registrada:
-
-    casa/estacion/sensor1/"22.1,87.3"
-
-### Instalación de MySQL
-
-Para poder almacenar todas las lecturas del sensor en una base de datos,hay que instalar el gestor de base de datos MySQL. Se instala también en un contenedor de Docker.
-
-Se crea el directorio necesario para que se almacenen los datos en la Raspberry Pi:
-
-        mkdir ~/estacion/mysql/data -p
-
-Se creamos y ejecuta el contenedor especificando que se monte un volumen para almacenar los datos en el directorio antes creado:
-
-        docker run --name mysql -d -p 3306:3306 -e MYSQL_ROOT_PASSWORD=P@ssw0rd -v ~/estacion/mysql/data:/var/lib/mysql hypriot/rpi-mysql
-
-Una vez está en ejecución, vamos hay que abrir un terminal para crear la base de datos y la tabla:
-
-        docker exec -it mysql mysql -p
-
-Se teclean los siguientes mandatos dentro del contenedor:
-
-        create database meteo;
-
-        use meteo;
-
-        CREATE TABLE IF NOT EXISTS `mediciones` (\
-        `fecha` TIMESTAMP DEFAULT CURRENT_TIMESTAMP COMMENT 'Fecha y hora de la lectura',\
-        `sensor` varchar(50) NOT NULL COMMENT 'Nombre del sensor',\
-        `temperatura` float COMMENT 'Temperatura',\
-        `humedad` float COMMENT 'Humedad',\
-        PRIMARY KEY (`fecha`,`sensor`),\
-        KEY `sensor` (`sensor`)\
-        ) COMMENT='Mediciones de temperatura';
-
-        exit
-
-
-### Instalación de NodeRED
-
-NodeRED se instala también en un contenedor.
-
-Como paso previo a la instalación hay que crear un directorio de trabajo para el almacenamiento persistente de los datos del contenedor:
-
-        mkdir ~/estacion/node-red p
-
-Se ejecuta el contenedor:
-
-        docker run -d -p 1880:1880 --name nodered -v ~/estacion/node-red:/data nodered/node-red
-
-Para acceder al entorno de trabajo, hay que abrir un navegador y acceder a la dirección de la Raspberry pi por el puerto 1880
-
-Una vez dentro del entorno de NodeRed hay que instalar una extensión para poder incorporar un nodo que permita leer y escribir en una base de datos MySQL. Para ello se accede al menú y en la opción *Settings*, en la pestaña *Palette* hay que buscar en el recuadro la palabra *mysql* e instalar la librería.
-
-Una vez instalada hay que importar el flow *estacion.json*.
-
-**Importante:**
-- Se debe entrar en el nodo de Mysql y cambiar la configuración con las credenciales de acceso y la dirección IP del servidor MySQL.
-- Hay que configurar también el nodo MQTT para cambiar la dirección del Broker MQTT. En ambos casos hay que poner la IP de la Raspberry Pi
-
-Finalmente, hay que pulsar sobre *Deploy*.
-
-### Instalación de Apache y PHP
-
-Se instala y ejecuta el servidor web Apachetambién en un contenedor de Docker.
-
-Se crea el directorio necesario para almacenar la página web en una carpeta local de la Raspberry Pi.
-
-        mkdir ~/estacion/htdocs
-
-Se copia el fichero *index.php* dentro de ~/estacion/htdocs
-
-
-**Importante:**. Con un editor de texto se debe editar el dichero *index.php* y cambiar la configuración con las credenciales de acceso y la dirección IP del servidor MySQL.
-
-Se instala y ejecuta el contenedor:
-
-        docker run --name apache -d -p 80:80 -v ~/estacion/htdocs:/var/www/html php:apache
-
-Es necesario instalar la extensión de PHP para acceder a base de datos MySQL. Para ello hay que ejecutar 3 comandos dentro del contenedor. Se puede hacer desde fuera del contenedor con la función exec de Docker:
-
-        docker exec -it apache docker-php-ext-install mysqli
-        docker exec -it apache docker-php-ext-enable mysqli
-        docker exec -it apache apachectl restart
+Se proponen 2 proyectos para realizar en grupo consistentes en la creación de clusters de RPis, en los cuales se pueden utilizar las Raspberrys de cada alumno. Además,el proyecto del RAID también se puede realizar en grupos de 3 alumnos, utilizando 2 de las tarjetas SD como discos duros.
