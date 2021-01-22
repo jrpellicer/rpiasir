@@ -1,5 +1,5 @@
 ---
-layout: default
+layout: page
 title: Página 2
 ---
 # Estación Meteorológica
