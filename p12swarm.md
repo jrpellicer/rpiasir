@@ -1,6 +1,6 @@
 ---
 layout: page
-title: Página 2
+title: Docker Swarm
 ---
 # Estación Meteorológica
 

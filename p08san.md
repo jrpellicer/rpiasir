@@ -1,6 +1,6 @@
 ---
 layout: page
-title: Página 2
+title: Disco SAN
 ---
 # Estación Meteorológica
 
