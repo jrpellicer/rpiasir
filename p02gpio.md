@@ -81,7 +81,7 @@ Veamos cómo utilizarlos para encender un led.
 
 En primer lugar vamos a conectar un led a la Raspberry. Los leds que se utilizan habitualmente con este tipo de placas (y con las Arduino) funcionan con un voltaje de entre 2 y 4 voltios. Dependiendo del led (incluso del color) necesitan una corriente u otra. Los pines GPIO nos sacarán un voltaje de 3,3v. Habría que mirar la hoja de especificaciones del led para saber a qué corriente operan y en base a eso y al voltaje que nos proporciona la Raspberry, calcular la resistencia que debemos poner al led para que funcione de manera óptima y no se funda.
 
-    En esta práctica, puesto que los leds operan en voltajes próximos a los 3,3v y el circuito que vamos a montar es un circuito sencillo, vamos a prescindir de las resistencias, montando directamente el led a la placa, aunque ello implique que el led no funcione óptimamente y pudiera recalentarse o fundirse por sobretensión.
+*En esta práctica, puesto que los leds operan en voltajes próximos a los 3,3v y el circuito que vamos a montar es un circuito sencillo, vamos a prescindir de las resistencias, montando directamente el led a la placa, aunque ello implique que el led no funcione óptimamente y pudiera recalentarse o fundirse por sobretensión.*
 
 Los leds tienen polaridad y es importante respetarla. El pin más largo es el ánodo (polaridad positiva), y el más corto es el cátodo (polaridad negativa):
 
