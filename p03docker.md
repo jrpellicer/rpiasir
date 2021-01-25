@@ -177,7 +177,7 @@ Para borrar un contenedor utilizamos el mandato rm e identificaremos el contened
 
     $ docker rm 523
 
-## SServidor WEB
+## Servidor WEB
 Vamos a crear y correr un contenedor con un servidor web. Vamos a contenerizar el servidor web Apache, de manera que se ejecute en un entorno aislado, sin interferir con otros servidores web que pudiéramos estar corriendo en nuestra máquina.
 
 En primer lugar descargamos la imagen del servidor web Apache desde el hub de Docker. Este paso no es necesario, pues ya hemos visto que al crear un contenedor se descargaría automáticamente la imagen indicada en caso de no estar ya descargada. La imagen del servidor web Apache se llama httpd.
@@ -224,4 +224,5 @@ Para descargar la imagen y ejecutar el contenedor ejecutamos el siguiente mandat
     $ docker run -d -p 8081:8081 resin/rpi-google-coder
 
 Para trabajar con él, accedemos mediante un navegador a la dirección de nuestra Raspberry, pero ojo, mediante una conexión https y por el puerto 8081
+
 Nos pedirá que confirmemos la excepción de seguridad, y tras hacerlo ya podemos validarnos en el Coder de nuestra RPi.
