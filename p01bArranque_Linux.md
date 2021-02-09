@@ -38,16 +38,16 @@ El nombre del fichero variará según la versión de Raspberry Pi OS que estemos
 
 Abrimos un terminal y nos situamos en nuestro directorio *Descargas*:
 
-    cd Descargas
+    $ cd Descargas
 
 Descomprimimos el fichero descargado:
 
-    unzip 2021-01-11-raspios-buster-armhf-lite.zip
+    $ unzip 2021-01-11-raspios-buster-armhf-lite.zip
 
 Comprobamos con un ls que está el fichero descargado y vemos que aún tenemos el fichero zip. Como el zip ya no nos hace falta, lo eliminamos:
 
-    ls
-    rm 2021-01-11-raspios-buster-armhf-lite.zip
+    $ ls
+    $ rm 2021-01-11-raspios-buster-armhf-lite.zip
 
 
 ## Preparación de la tarjeta SD
