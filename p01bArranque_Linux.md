@@ -1,8 +1,8 @@
 ---
 layout: page
-title: Arranque Windows
+title: Arranque Linux
 ---
-# Puesta en marcha de la Raspberry Pi (Desde Windows 10)
+# Puesta en marcha de la Raspberry Pi (Desde Ubuntu)
 
 ## Raspberry Pi OS
 El sistema operativo “oficial” de la Raspberry Pi es el Raspberry Pi OS, anteriormente denominado *Raspbian*. Es una adaptación de *Debian*, la popular distribución de Linux. Además de *Raspberry PI OS* (*Raspbian*) se pueden instalar otros sistemas operativos adaptados a la arquitectura ARM del procesador de la Raspberry, incluida una versión de Windows 10.
@@ -31,27 +31,33 @@ Nos da 3 ediciones posibles para descargar:
 
 Seleccionamos la edición Lite, la más ligera y que no incorpora herramientas gráficas.
 
-Descargamos el fichero zip o hacemos la descarga por torrent y nos quedamos con el fichero con extensión .img:
-*2021-01-11-raspios-buster-armhf.lite.img*
+Descargamos el fichero zip o hacemos la descarga por torrent. En el directorio *Descargas* nos quedará el fichero:
+*2021-01-11-raspios-buster-armhf.lite.zip*
 
 El nombre del fichero variará según la versión de Raspberry Pi OS que estemos descargando en ese momento. Nos aparecerá disponible para la descarga siempre la versión más reciente.
+
+Abrimos un terminal y nos situamos en nuestro directorio *Descargas*:
+
+    cd Descargas
+
+Descomprimimos el fichero descargado:
+
+    unzip 2021-01-11-raspios-buster-armhf-lite.zip
+
+Comprobamos con un ls que está el fichero descargado y vemos que aún tenemos el fichero zip. Como el zip ya no nos hace falta, lo eliminamos:
+
+    ls
+    rm 2021-01-11-raspios-buster-armhf-lite.zip
 
 
 ## Preparación de la tarjeta SD
 ### Formateo de la tarjeta
-Para poder instalar la imagen descargada en la tarjeta SD es necesario utilizar una serie de programas que hay que descargar previamente.
+Para poder instalar la imagen descargada en la tarjeta SD en Linux no es necesario utilizar ningún programa especial, con los comandos del sistema operativo es suficiente..
 
 Para trabajar con la tarjeta la introduciremos en un lector de tarjetas o en un adaptador USB conectado al ordenador.
 
-Los programas de los que vamos a hablar a continuación son para ser utilizados en Windows 10.
 
-En primer lugar descargamos el programa **SD Card Formatter**. Este programa lo utilizaremos cuando queramos formatear la tarjeta SD. En algunos casos será necesario formatear la tarjeta antes de flashear la imagen del sistema operativo en ella.
 
-Simplemente le indicamos la unidad que corresponde a la tarjeta y pulsamos sobre el botón *Format*.
-
-![Formateo de la tarjeta](./images/0102.png)
-
-Si la tarjeta ya estuviera formateada (y no reparticionada), aunque tuviera algún dato escrito anteriormente, no hará falta este paso, procederemos directamente a grabar la imagen de Raspbian.
 
 ### Instalación del Sistema Operativo
 Para grabar la imagen de Raspbian podemos utilizar varios programas grabadores de tarjetas SD. Cualquiera de los 2 siguientes se pueden utilizar:
