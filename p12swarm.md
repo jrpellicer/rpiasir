@@ -2,14 +2,13 @@
 layout: page
 title: Docker Swarm
 ---
-# Estación Meteorológica
+# Cluster de Docker Swarm
 
-Proyecto de estación meteorológica con NodeMCU, sensor DHT22 y Raspberry Pi
+Esta práctica consiste en la creación de un Cluster de Raspberrys con el fin de ejecutar contenedores en el mismo. El hecho de utilizar un cluster nos va a proporcionar ventajas como **Alta Disponibilidad** o **Escalabilidad** en nuestro sistema, de modo que el servicio que estemos ejecutando en un contenedor esté siempre disponible aunque caiga alguno de los nodos del cluster, y que además sea sencillo de escalar (ampliar) la capacidad de respuesta del servicio para satisfacer necesidades.
 
-## Objetivo del proyecto
+Para poder crear un cluster necesitaremos de varias Raspberrys, por tanto esta práctica debe hacerse por grupos (3 es un número ideal) compartiendo las Raspberrys. Los ejemplos que se detallan a continuación son para un cluster formado por 3 RPi, 1 de ellas actuando como servidor maestro (*manager* en el argot de Docker Swarm) y las otras 2 como esclavos (*workers* en Docker Swarm).
 
-Creación de una estación meteorológica conectada a la red con la posibilidad de acceder a sus datos remotamente vía web. Para ello, se implementa un pequeño sistema IoT doméstico con sensores de temperatura y humedad conectados por wifi, que almacena las lecturas obtenidas en una base de datos ubicada en una Raspberry Pi y que a su vez también actúa de servidor web.
 
-El paso de los datos desde el sensor hasta la Raspberry Pi se hace mediante el protocolo MQTT. Los mensajes MQTT recibidos vía WiFi en la Raspberry se procesan mediante Node-RED y se almacenan en una BBDD MySQL, estando disponibles para ser accedidos por el servidor web Apache también ubicado en la Raspberry Pi.
+## Docker Swarm
 
-Todos los servicios aojados en la Raspberry Pi están contenerizados con Docker.
+
