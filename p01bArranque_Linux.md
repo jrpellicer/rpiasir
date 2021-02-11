@@ -81,7 +81,7 @@ Asumiendo que tenemos el fichero *.img* en el directorio *~/Descargas* y que est
 
     $ sudo dd bs=4M if=2021-01-11-raspios-buster-armhf-lite.img of=/dev/sdb
 
-Una vez ya se ha grabado la imagen en la tarjeta SD podemos comprobar que se han creado 2 particiones.
+Una vez ya se ha grabado la imagen en la tarjeta SD podemos comprobar que se han creado 2 particiones dentro de la tarjeta.
 
     $ lsblk
 
@@ -105,6 +105,8 @@ Si todo ha ido bien, volvemos a ejecutar *lsblk* y comprobamos los puntos de mon
     ├─sdb1        8:1    1   256M  0 part /media/usuario/boot
     └─sdb2        8:2    1   1,5G  0 part /media/usuario/rootfs
 
+Ahora podemos acceder a la tarjeta SD accediendo a esos 2 directorios de punto de montaje.
+
 
 ## Modificación de los archivos de configuración de la red
 ### Configuración de las opciones de arranque
@@ -122,9 +124,13 @@ Para que se active el servidor SSH en el primer arranque basta con crear un fich
 
     $ touch ssh
 
+Dependiendo de cómo queremos conectar la Raspberry Pi a la red hemos de sguir una serie de pasos que se detallan a continuación:
+- **Conexión por WiFi con IP dinámica**.
+- **Conexión por cable de red con IP dinámica**.
+- **Conexión por cable de red con IP fija**.
 
-### Conexión a la red por cable con IP dinámica
-Si conectamos nuestra Raspberry Pi por cable y disponemos de un servidor DHCP no es necesario tocar ningún fichero de configuración. Basta con conectar el cable de red, y una vez arrancada la Raspberry buscar con algún programa de escaneo de IPs, qué dirección IP le ha asignado el servidor DHCP.
+Por tanto de los 3 puntos que se detallan a continuación sólo hemos de seguir uno.
+
 
 ### Configuración WiFi y asignación de IP por DHCP
 Si deseamos conectarnos vía WiFi a nuestra red, en lugar de con una conexión cableada, deberemos configurar la conexión creando en el mismo directorio en el que creamos el fichero ssh, un nuevo fichero llamado **wpa_supplicant.conf**. Estando en el directorio */media/usuario/boot* utilizamos el editor de textos *nano*:
@@ -143,7 +149,7 @@ Y tecleamos el siguiente contenido:
         key_mgmt=WPA-PSK 
     }
 
-Para salir del editor nano pulsamos *Ctrl+X* para salir y cuando nos pregunta si queremos guardar pulsamos la tecla *y*.
+Para salir del editor nano pulsamos *Ctrl+X* para salir y cuando nos pregunta si queremos guardar pulsamos la tecla *y* (*s*).
 
 Puesto que no sabemos la dirección IP que le va a asignar y puesto que en el aula habrá más Raspberrys que tendrán el mismo nombre de equipo (*raspberry*), vamos a cambiar el nombre de modo que podamos saber a qué Raspberry estamos conectados.
 
@@ -182,6 +188,11 @@ Con esto sería suficiente para poder establecer una conexión remota. Si dispon
 
 Programas hay muchos para escanear la red, tanto para PC, Linux o Mac, incluso en Android, siendo muy cómo hacerlo desde el móvil si estamos conectadoa una red WiFi. Nosotros lo haremos con el programa *nmap*, lo veremos más adelante.
 
+
+### Conexión a la red por cable con IP dinámica
+Si conectamos nuestra Raspberry Pi por cable y disponemos de un servidor DHCP no es necesario tocar ningún fichero de configuración. Basta con conectar el cable de red, y una vez arrancada la Raspberry buscar con algún programa de escaneo de IPs, qué dirección IP le ha asignado el servidor DHCP.
+
+
 ### Configuración IP fija en red cableada sin DHCP
 Si optáramos por una red cableada y quisiéramos asignar una IP manual de manera provisional podríamos hacerlo del siguiente modo.
 
@@ -189,11 +200,11 @@ Estando en el directorio */media/usuario/boot* utilizamos el editor de textos *n
 
     $ nano cmdline.txt
 
-Añadimos al inicio de la línea lo siguiente (y añadiendo un espacio en blanco después):
+Añadimos al inicio de la línea (y añadiendo un espacio en blanco después):
 
     ip=192.168.1.99
 
-Sustituyendo la dirección por la que deseemos. Salimos del editor con CTRL+X guardando.
+Sustituyendo la dirección IP por la que deseemos. Salimos del editor con CTRL+X guardando.
 
 Nos situamos en nuestra carpeta personal, como paso previo para poder desmontar los dispositivos:
 
@@ -208,6 +219,7 @@ Extraemos la tarjeta SD del ordenador.
 
 Una vez tuviéramos en marcha la Raspberry Pi, deberíamos asignar la dirección IP estática mediante las opciones de configuración. Ver más adelante.
 
+
 ## Puesta en marcha
 Una vez flasheada la tarjeta SD y creados y modificados los ficheros necesarios, la extraemos del ordenador, la introducimos en la Raspberry Pi y conectamos la fuente de alimentación y el cable de red (si no hubiéramos configurado la conexión WiFi).
 
@@ -216,6 +228,7 @@ Al enchufar la fuente de alimentación se enciende la automáticamente la Raspbe
 Si hubiéramos conectado un monitor por el puerto HDMI, así como un teclado y un ratón por los puertos USB, tendríamos un terminal listo para ser utilizado, pero vamos a prescindir de monitor, teclado y ratón y la conexión la haremos vía terminal remoto.
 
 Si la configuración que hemos grabado ha sido correcta, al arrancar la Raspberry se ha debido activar el servicio SSH y se ha debido configurar la red con la dirección IP estática que le hemos asignado o la conexión WiFi que hemos configurado. Estamos por tanto en condiciones de conectarnos de manera remota desde un terminal SSH.
+
 
 ### Conexión por SSH
 Con la Raspberry Pi funcionando y el servicio SSH arrancado, el siguiente paso será abrir una sesión remota desde nuestro ordenador.
@@ -335,7 +348,7 @@ Salimos del programa de configuración con la opción Finish y nos pide reinicia
 
 Una vez dentro del editor, modificamos la línea y eliminamos la dirección ip que habíamos añadido para dejar el fichero como estaba originariamente.
 
-Para salir del editor nano pulsamos *Ctrl+X* para salir y cuando nos pregunta si queremos guardar pulsamos la tecla *y*.
+Para salir del editor nano pulsamos *Ctrl+X* para salir y cuando nos pregunta si queremos guardar pulsamos la tecla *y* (*s*).
 
 Por último, vamos a editar el fichero donde se almacena la configuración de la red para dejar como dirección IP estática la que habíamos asignado provisionalmente. Este fichero es el *dhcpcd.conf* que se encuentra en el directorio */etc*
 
@@ -376,10 +389,16 @@ Para configurar el acceso SSH con clave pública hay que hacer los siguientes pa
 - Copiar la clave pública al servidor (la Raspberry).
 - Deshabilitar el acceso al servidor con contraseña.
 
-Al tratarse el nuestro de un entorno de pruebas, el último paso de deshabilitar el acceso mediante contraseña no lo vamos a hacer, así evitaremos problemas y podremos conectarnos desde cualquier equipo y con cualquier usuario poniendo la contraseña.
+Al tratarse el nuestro de un entorno de pruebas, el último paso de **deshabilitar el acceso mediante contraseña no lo vamos a hacer**, así evitaremos problemas y podremos conectarnos desde cualquier equipo y con cualquier usuario poniendo la contraseña.
 
 ### Generación de las claves
-En primer lugar, para generar las claves podemos usar **ssh-keygen** en la máquina local desde la que nos queremos conectar al servidor. Así pues, en nuestra máquina Windows 10 desde PowerShell (y sin tener ninguna conexión SSH abierta) tecleamos:
+En primer lugar, para generar las claves podemos usar **ssh-keygen** en la máquina local desde la que nos queremos conectar al servidor.
+
+Si estamos conectados a la Raspberry Pi, en primer lugar vamos a salir tecleando *exit*. Con este comando cerramos sesión pero no apagamos la Raspberry.
+
+    pi@asir1rpi01:~ $ exit
+
+Ahora ya, en nuestra máquina Linux (y sin tener ninguna conexión SSH abierta) tecleamos:
 
     $ ssh-keygen -t rsa -b 4096
 
@@ -419,11 +438,11 @@ Copiamos directamente el archivo de clave pública desde el cliente al servidor 
 
     $ scp ~/.ssh/id_rsa.pub pi@192.168.1.99:/home/pi/uploaded_key.pub
 
-Una vez copiado, iniciamos sesión en la Raspberry:
+Una vez copiado, iniciamos de nuevo sesión en la Raspberry:
 
     $ ssh pi@192.168.1.99
 
-La clave pública hay que incluirla en el archivo **authorized_keys** dentro de un directorio llamado *.ssh* de la carpeta personal del usuario pi (*/home/pi/.ssh/authorized_keys*). Como la carpeta *.*ssh* no existe, la creamos antes de copiar, así como el archivo authorized_keys:
+La clave pública hay que incluirla en el archivo **authorized_keys** dentro de un directorio llamado *.ssh* de la carpeta personal del usuario pi (*/home/pi/.ssh/authorized_keys*). Como la carpeta *.*ssh* no existe, la creamos antes de copiar, así como el archivo *authorized_keys*:
 
     pi@asir1rpi01:~ $ mkdir .ssh
     pi@asir1rpi01:~ $ chmod 700 .ssh
