@@ -143,7 +143,7 @@ Nosotros vamos a enviar el inventario desde una máquina **Windows 10**, pero en
 
 Es un script muy sencillo que llama al programa que envía el inventario pasándole como parámetro la dirección IP de nuestra raspberry que nos solicitará por pantalla.
 
-Descargamos el archivo zip en una máquina Windows 10:
+Descargamos el siguiente archivo zip en una máquina Windows 10 (pulsar en *Guardar enlace como*):
 
 [Cliente OCSInventory](../ocsinventory/OCSInventory.zip)
 
