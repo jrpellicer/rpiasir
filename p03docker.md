@@ -185,6 +185,7 @@ En primer lugar descargamos la imagen del servidor web Apache desde el hub de Do
     $ docker pull httpd
 
 Puesto que vamos a contenerizar un servidor web, vamos a crear primero un directorio en el que almacenaremos los ficheros de la página web. Aunque no es el lugar donde debería ir, ese directorio lo vamos a crear en nuestra carpeta personal (que si no hemos cambiado de directorio es donde nos encontramos). Lo llamamos www:
+
     $ mkdir www
 
 El siguiente paso es crear e iniciar  el contenedor con el comando run:
