@@ -77,9 +77,11 @@ Añadimos el usuario Pi al grupo docker:
     # usermod -aG docker pi
 
 Cerramos sesión de root:
+
     # exit
 
 Cerramos sesión del usuario Pi para que el cambio en el grupo tenga efecto:
+
     $ exit
 
 Volvemos a entrar con el usuario Pi y comprobamos que tenemos Docker instalado y funcionando:
