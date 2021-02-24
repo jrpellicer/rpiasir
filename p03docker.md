@@ -123,6 +123,7 @@ Una vez localizada la imagen que deseamos, sólo falta descargarla mediante el c
     $ docker pull httpd
 
 Comprobamos que la tenemos descargada:
+
     $ docker images
 
 Es interesante comprobar la información que nos muestra, como el ID de imagen y el tamaño de la misma.
@@ -138,11 +139,13 @@ Una vez descargada la imagen es hora de crear nuestra "máquina virtual", es dec
 Para crear un contenedor tenemos 2 comandos. El comando create crea un contenedor a partir de una imagen pero no lo ejecuta. El comando run crea y ejecuta un contenedor.
 
 La sintaxis del comando create es la siguiente:
+
 *docker create –\[opciones] imagen \[comando]*
 
 En caso de que la imagen no estuviera descargada, el comando create la descargará. Al contenedor creado se le asignará un identificador de 64 caracteres (se suelen mostrar 12) que nos mostrará por pantalla y que será necesario para futuras operaciones que hagamos con él.
 
 Como norma general, el comando run lo ejecutaremos así:
+
 *sudo docker run -d -p puerto_real:puerto_container imagen*
 
 Es importante el mapeo de puertos, en el que si es necesario que nuestro contenedor utilice algún puerto (por ejemplo el 80 en un servidor web) le indiquemos a qué puerto de nuestra máquina lo queremos mapear (normalmente también el 80).
@@ -160,6 +163,7 @@ Podemos comprobar que se ha descargado automáticamente la imagen de Debian:
 Una vez creado el contenedor se ejecutará dentro del mismo la orden cat/etc/debian_version. Como este comando termina su ejecución de visualizar la versión de la distribución, el contenedor se detendrá. Las opciones -ti indican que se ha de iniciar el contenedor con la posibilidad de acceder al terminal (-t) y que se ha de iniciar el contenedor en modo intearctivo (-i).
 
 Para ver los contenedores que tenemos arrancados ejecutamos el siguiente comando:
+
     $ docker ps
 
 Nos muestra que no hay ningún contenedor iniciado, pues el que hemos arrancado, al ejecutar el comando que le hemos dicho (cat /etc/debian_version), se ha detenido. Podemos ver todos los contenedores creados con la opción -a y veremos que ahora sí que nos aparece, pero con status finalizado (exited):
@@ -214,12 +218,14 @@ Y una vez instalado acceder mediante un navegador a la dirección IP de nuestro 
 <img src="./images/0303.png" width="650">
 
 Desde la interfaz web podremos crear, arrancar, parar o eliminar contenedores, así como gestionar las imágenes e incluso crearlas desde algún contenedor o desde un Dockerfile. También podemos administrar las redes y los volúmenes. Como añadido, incluye también plantillas con posibilidad de descarga de contenedores populares.
+
 Una aplicación imprescindible para la gestión de Docker.
 
 ## Coder
 Coder es un proyecto gratuito y de código abierto que convierte un Raspberry Pi en una plataforma sencilla que se puede utilizar para enseñar los fundamentos de la programación web. Es un entorno de desarrollo web que funciona en un navegador en el que se pueden crear pequeños proyectos en HTML, CSS y JavaScript, directamente desde el navegador web.
 
 Para instalar Coder podemos optar por una instalación clásica, descargando e instalando los paquetes necesarios, o en nuestro caso, optamos por la descarga de un contenedor en el que ya está instalado Coder.
+
 Para descargar la imagen y ejecutar el contenedor ejecutamos el siguiente mandato:
 
     $ docker run -d -p 8081:8081 resin/rpi-google-coder
