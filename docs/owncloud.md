@@ -1,6 +1,7 @@
 ---
 layout: page
 title: Owncloud
+nav_order: 6
 ---
 # NUBE PRIVADA CON OWNCLOUD
 

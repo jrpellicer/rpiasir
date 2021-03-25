@@ -1,6 +1,7 @@
 ---
 layout: page
 title: GPIO
+nav_order: 4
 ---
 # Los puertos GPIO
 

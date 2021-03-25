@@ -1,6 +1,7 @@
 ---
 layout: page
 title: Disco RAID
+nav_order: 11
 ---
 # RAID
 
@@ -32,7 +33,7 @@ Por todo ello, vamos a hacer esta práctica con tarjetas SD a modo de disco duro
 **ATENCIÓN:** El contenido de las tarjetas será eliminado.
 
 
-## CONEXIÓN DEL PRIMER DISCO EXTRAÍBLE
+## Conexión del primer disco extraíble
 ### Conexión y montaje del disco
 Al igual que hicimos con la conexión de un disco DAS, vamos a conectar un disco duro extraíble directamente a la Raspberry.
 Lo conectamos a un puerto USB preferiblemente en uno de los puertos USB 3.
@@ -101,7 +102,7 @@ Una vez medida la velocidad de escritura procedemos a desmontar el disco. Para d
 
     $ sudo umount /dev/sda1
 
-## CONEXIÓN DEL SEGUNDO DISCO EXTRAÍBLE
+## Conexión del segundo disco extraíble
 Conectamos el segundo disco, también a un puerto USB 3. Raspbian lo reconocerá automáticamente. Ejecutamos *lsblk*:
 
     $ lsblk
@@ -117,7 +118,7 @@ Conectamos el segundo disco, también a un puerto USB 3. Raspbian lo reconocerá
 
 Tenemos los 2 discos conectados como */dev/sda* y */dev/sdb*, y las particiones NTFS que hay creadas en cada uno de esos discos son */dev/sda1* y */dev/sdb1*.
 
-## INSTALACIÓN DE MDADM
+## Instalación de MDADM
 Vamos a proceder a instalar el paquete *MDADM* (Multiple Device Administrator), que es un conjunto de herramientas que son utilizadas en GNU/Linux para la gestión del RAID.
 
 MDADM viene instalado en algunas distribuciones Linux por defecto (en las Servers normalmente) pero no en Raspbian.
@@ -130,7 +131,7 @@ Instalamos el paquete llamado mdam:
 
     $ sudo apt-get install mdadm
 
-## CREACIÓN DEL RAID 0
+## Creación del RAID-0
 Una vez instalado el paquete mdadm ya podemos podemos crear los siguientes tipos de RAID: RAID 0, RAID 1, RAID 4, RAID 5, RAID 6 y RAID 10.
 
 Vamos a crear un RAID-0 con los dos discos definidos como dispositivos */dev/sda* y */dev/sdb*.
@@ -167,7 +168,7 @@ Cambiamos el usuario propietario y el grupo propietario del directorio que acaba
 
     $ sudo chown pi:pi /media/disco_ext/ -R
 
-## COMPROBACIÓN DEL FUNCIONAMIENTO
+## Comprobación del funcionamiento
 Finalizado el proceso de creación, comprobamos con el mandato *lsblk* la lista de dispositivos:
 
     $ lsblk

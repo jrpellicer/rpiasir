@@ -1,10 +1,11 @@
 ---
 layout: page
 title: Cluster
+nav_order: 15
 ---
-# CLUSTER DE COMPUTACIÓN PARALELA
+# Cluster de Computación Paralela
 
-## COMPUTACIÓN PARALELA
+## Computación Paralela
 Hemos visto en el proyecto anterior cómo unir varias Raspberry Pi para crear un cluster con el que conseguir una alta disponibilidad y aumentar la escalabilidad de un modo sencillo utilizando servicios ejecutándose en contenedores. En ese caso anterior hemos utilizado un orquestador de contenedores (el Docker Swarm) que nos ha facilitado enormemente la tarea de repartir los procesos entre los nodos.
 
 Otro de los usos de los clusters es el de la computación paralela, muy utilizado en supercomputación.
@@ -21,7 +22,7 @@ Una de las técnicas que se utilizan en supercomputación para ejecutar procesos
 
 Nosotros vamos a ejecutar de forma paralela un pequeño programa en Python que utiliza esta librería y comprobaremos los tiempos de respuesta dependiendo del número de procesos que lancemos concurrentemente.
 
-## PREPARACIÓN DE LOS NODOS
+## Preparación de los nodos
 Vamos a montar un cluster con 3 Raspberry Pi. No es necesario hacer nada especial. Únicamente han de estar las 3 Raspberry Pi en la misma red y asegurarnos que se vean. Una de las Raspberry la elegiremos como nodo maestro.
 
 En primer lugar vamos a nombrar cada nodo con un nombre único. Podemos utilizar como nombres *Maestro*, *Nodo1* y *Nodo2*. Si los nombres ya existieran en la red (de otros compañeros) utilizaremos otra combinación. Podemos utilizar los nombres que usamos en la práctica anterior o ejecutar el comando de configuración para cambiar los nombres en cada uno de los nodos:
@@ -62,7 +63,7 @@ Lo que sí que vamos a hacer es crear una clave pública en cada uno de los nodo
     $ ssh-keygen
     (pulsamos Intro en cada una de las opciones que nos pide)
 
-## PREPARACIÓN DEL NODO MAESTRO
+## Preparación del Nodo Maestro
 Estos pasos los vamos a realizar **únicamente en el nodo maestro**. En los nodos esclavos no hace falta hacer nada.
 
 ### Creación del machinefile
@@ -93,7 +94,7 @@ Y repetimos el comando con la IP del Nodo2:
 
 A partir de este momento, cuando se haga un ssh desde el Maestro a los nodos esclavos con el usuario Pi, ya no será necesario poner la contraseña.
 
-## EJECUCIÓN DE LOS PROGRAMAS EN PARALELO
+## Ejecución de los prrogramas en paralelo
 Ya estamos en condiciones de ejecutar un programa de forma paralela en el cluster. Vamos a ejecutar 2.
 
 ### Helloworld.py

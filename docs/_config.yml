@@ -1,0 +1,13 @@
+title: Proyectos con Raspberry Pi para el aula de 1º de ASIR
+description: Página de proyectos a realizar en el aula de 1º de ASIR con Raspberry Pi
+remote_theme: carlosperate/jekyll-theme-rtd
+
+# Theme settings:
+site_author: José Ramón Pellicer Marco
+repo_url: "https://github.com/jrpellicer/rpiasir"
+edit_on_github: true
+github_docs_folder: true
+sticky_navigation: true
+prev_next_buttons_location: both
+search_enabled: false
+hljs_style: github-gist

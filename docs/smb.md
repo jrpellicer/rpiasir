@@ -1,6 +1,7 @@
 ---
 layout: page
 title: NAS con SMB
+nav_order: 9
 ---
 
 # DISCO NAS CON SMB

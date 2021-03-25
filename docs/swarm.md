@@ -1,6 +1,7 @@
 ---
 layout: page
 title: Docker Swarm
+nav_order: 14
 ---
 # CLUSTER DE DOCKER SWARM
 
@@ -9,7 +10,7 @@ Esta práctica consiste en la creación de un Cluster de Raspberrys con el fin d
 Para poder crear un cluster necesitaremos de varias Raspberrys, por tanto esta práctica debe hacerse por grupos (3 es un número ideal) compartiendo las Raspberrys. Los ejemplos que se detallan a continuación son para un cluster formado por 3 RPi, 1 de ellas actuando como servidor maestro (*manager* en el argot de Docker Swarm) y las otras 2 como esclavos (*workers* en Docker Swarm).
 
 
-## DOCKER SWARM
+## Docker Swarm
 **Docker Swarm** es un componente de Docker que se instala automáticamente al instalar Docker Engine, por lo tanto no debemos hacer nada especial para su instalación, más allá de la instalación de Docker.
 
 Docker Swarm es un Orquestador de Contenedores. Como se puede intuir a partir de su nombre, un orquestador de contenedores nos ayuda con la implementación, escalado y administración de aplicaciones en contenedores. Nos permite administrar clusters donde ejecutar contenedores, proporcionando alta disponibilidad, escalado, balanceo de carga, monitorización, etc. De entre los orquestadores de contenedores, el más famoso y utilizado es **Kubernetes**, un software de código abierto que comenzó a desarrollar Google para la orquestación de los contenedores en su infraestructura.
@@ -38,7 +39,7 @@ Docker Swarm permite de manera muy sencilla el escalado del número de contenedo
 
 En esta práctica el escalado lo haremos de forma manual, pero sería posible utilizar aplicaciones de autoescalado en base al monitoreo de los servidores, tal y como se hace en las aplicaciones de cloud computing.
 
-## PREPARACIÓN DE LAS MÁQUINAS
+## Preparación de las máquinas
 ### Montaje del Cluster
 Vamos a montar un cluster con 3 Raspberry Pi. Para montar un cluster de Docker Swarm en las Raspberry Pi no es necesario hacer nada especial, más allá de que todas las Raspberrys estén en la misma red, con nombres de máquina y direcciones IP distintas, y con Docker instalado en todas ellas.
 
@@ -60,7 +61,7 @@ La segunda opción es optar por cambiar directamente el nombre de la máquina mo
     $ sudo nano /etc/hosts
     $ sudo reboot
 
-## CREACIÓN DEL CLUSTER
+## Creación del cluster
 ### Instalación de Docker
 Puesto que lo que vamos a crear es un cluster de Docker Swarm, comenzamos por instalar Docker en cada uno de los nodos (maestro y esclavos) que forman el cluster. Optamos por la instalación automatizada.
 
@@ -111,6 +112,8 @@ Nos está indicando que ejecutemos en los nodos que queremos unir al cluster el 
 
     pi@Nodo1:~ $ docker swarm join --token SWMTKN-1-00q1ec0r2jk3rsa48gva59l8g492lrqycb8990ghi10uls258e-39m37yejmpmblvxknr520l539 192.168.1.27:2377
 
+Repetimos la operación en el nodo 2:
+
     pi@Nodo2:~ $ docker swarm join --token SWMTKN-1-00q1ec0r2jk3rsa48gva59l8g492lrqycb8990ghi10uls258e-39m37yejmpmblvxknr520l539 192.168.1.27:2377
 
 En ambos casos nos informa de la correcta unión del nodo al cluster como worker (Docker swarm utiliza el término trabajador en lugar del término mal sonante esclavo).
@@ -126,7 +129,7 @@ Ya tenemos el cluster de docker swarm creado. Para comprobarlo, desde el nodo ma
     0c3a6t79f5ndpfc0jf34bqiwz     Nodo1      Ready     Active                          20.10.2
     vercom51s2qn4nvfgaardx7lk     Nodo2      Ready     Active                          20.10.2
 
-## EJECUCIÓN DE SERVICIOS EN EL CLUSTER
+## Ejecución de servicios en el cluster
 ### Ejecución de servicios
 En Docker Swarm el término contenedor se sustituye por el de servicio como unidad mínima. Un servicio está formado por un conjunto de tareas individuales que se procesan en contenedores independientes en uno de los nodos del clúster.
 
@@ -170,7 +173,7 @@ Accedemos a la web y nos aparece el nombre de la máquina que está sirviendo la
 
 Este balanceo lo hace el propio Docker Swarm, de manera que aunque estemos accediendo a la IP del nodo maestro, internamente puede ser cualquier nodo quien nos sirva la solicitud httpd.
 
-## ESCALADO HORIZONTAL
+## Escalado horizontal
 Supongamos que en un momento determinado nuestra página web tiene mucho tráfico y los 2 nodos no son capaces de atender todas las solicitudes. Podríamos hacer un escalado horizontal, ampliando el número de réplicas del contenedor y por tanto ejecutándose en más nodos.
 
 Este escalado lo vamos a hacer de manera manual, pero es habitual utilizar herramientas de autoescalado en base a unos parámetros que nosotros prefijemos de antemano. Es una técnica bastante habitual en servidores web que se ejecutan en la nube (y por tanto se paga por el uso) y que son capaces de autoescalarse cuando el tráfico aumenta y el rendimiento empeora.
@@ -195,7 +198,7 @@ Desescalemos ahora el servicio y dejémoslo en tan sólo 2 réplicas:
 
     pi@Maestro:~ $ docker service scale servicio_web=2
 
-## ALTA DISPONIBILIDAD
+## Alta disponibilidad
 Hemos comprobado que el poder ejecutar contenedores en un cluster nos permite escalar horizontalmente el servicio de modo que si un nodo se sobrecarga de peticiones, el cluster pueda balancear la carga y repartir el trabajo entre los nodos restantes.
 
 Veamos ahora que el trabajar con un cluster también nos va a proporcionar Alta Disponibilidad.

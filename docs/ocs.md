@@ -1,6 +1,7 @@
 ---
 layout: page
 title: OCS Inventory
+nav_order: 12
 ---
 # OCS Inventory
 
@@ -16,7 +17,7 @@ Además de instalar los paquetes, habrá que configurar el servidor web Apache y
 Por último, habrá que descargar el propio programa OCS Inventory, descomprimirlo y configurarlo.
 Son unos cuantos pasos que, aunque no son difíciles de entender, pueden darnos algún problema y son un poco costosos.
 
-## INSTALACIÓN DEL SERVIDOR OCS INVENTORY EN LA RPi
+## Instalación del servidor OCS Inventory en la RPi
 Como se ha comentado, el proceso de instalación de OCS Inventory en la raspberry es un tanto costoso, pues hay que instalar un Apache, PERL y MariaDB, además de la descarga e instalación del propio paquete.
 
 Vayamos por pasos. En primer lugar actualizamos los repositorios:
@@ -76,7 +77,7 @@ Reiniciamos el servidor web Apache:
 
     pi@raspberrypi:~ $ sudo service apache2 restart
 
-## FINALIZACIÓN DE LA INSTALACIÓN VÍA WEB
+## Finalización de la instalación vía Web
 Ya tenemos instalado el servidor, vamos a acabar de configurar el sitio web. Para ello, desde un ordenador con acceso a la red de nuestra Raspberry abrimos el navegador y accedemos a la dirección de la RPi:
 
     http://DireccionDelServer/ocsreports
@@ -136,7 +137,7 @@ Reiniciamos el servidor web:
 
     pi@raspberrypi:~ $ sudo service apache2 restart
 
-## INSTALACIÓN DEL AGENTE EN LOS CLIENTES
+## Instalación del agente en los clientes
 Para enviar de manera automática el inventario de un equipo a nuestro recién instalado servidor debemos ejecutar en el equipo cliente un agente. Dependiendo del sistema operativo instalado debemos descargar desde la página web oficial uno de los programas clientes válidos para nuestro cliente.
 
 Nosotros vamos a enviar el inventario desde una máquina **Windows 10**, pero en lugar de descargar e instalar el programa agente para que se ejecute de manera automática y periódica, vamos a descargar un script que he hecho para que sólo se envíe una vez el inventario sin necesidad de instalar ningún programa en nuestro equipo.
@@ -151,7 +152,7 @@ Descomprimimos el archivo .zip y ejecutamos el script *.\inventario.ps1* (pulsam
 
 Nos solicita la IP de la Raspberry y se envía el inventario.
 
-## ACCESO A LOS INFORMES
+## Acceso a los informes
 OCS Inventory nos proporciona mediante su interfaz web un informe dinámico con todo el Hardware y Software de los equipos inventariados.
 
 Para acceder a los resultados basta con validarnos en la dirección web del servidor (nuestra raspberry) con el usuario admin y la contraseña admin.

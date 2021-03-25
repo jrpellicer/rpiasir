@@ -1,6 +1,7 @@
 ---
 layout: page
 title: Disco SAN
+nav_order: 10
 ---
 # Disco SAN
 

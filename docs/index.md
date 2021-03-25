@@ -1,6 +1,8 @@
 ---
 layout: page
 title: Inicio
+excerpt: Proyectos con Raspberry Pi en 1º ASIR
+nav_order: 1
 ---
 # La Raspberry Pi en el aula de 1º de ASIR
 Esta es una recopilación de pequeños proyectos para realizar en el aula de 1º del CFGS de ASIR con Raspberry Pi en los que se ven contenidos de manera transversal, o si se prefiere al revés, son proyectos en los que se ven contenidos de 1º de ASIR mientras se ve Linux en una Raspberry Pi de manera transversal. El objetivo final es aprender contenidos mientras se aprende Linux jugando con una Raspberry Pi.
@@ -43,7 +45,6 @@ Para desarrollar los proyectos se necesita que cada alumno cuente con una Raspbe
 
 En algunos de los proyectos es necesario que se conecte un disco duro externo mediante un conector USB. Prácticamente todos los alumnos disponen de un disco duro externo para uso particular que podrían utilizar para la realización de estos proyectos.
 
-Existen kits en el mercado de Raspberry Pi + Tarjeta + Conector + Cable HDMI + Carcasa por unos 80-90 €
-En nuestro caso el cable HDMI no va a ser necesario para la realización de ningún proyecto, pues nos conectaremos por terminal vía SSH a nuestro sistema.
+Existen kits en el mercado de Raspberry Pi + Tarjeta + Conector + Cable HDMI + Carcasa por unos 80-90 € En nuestro caso el cable HDMI no va a ser necesario para la realización de ningún proyecto, pues nos conectaremos por terminal vía SSH a nuestro sistema.
 
 Se proponen 2 proyectos para realizar en grupo consistentes en la creación de clusters de RPis, en los cuales se pueden utilizar las Raspberrys de cada alumno. Además,el proyecto del RAID también se puede realizar en grupos de 3 alumnos, utilizando 2 de las tarjetas SD como discos duros.
