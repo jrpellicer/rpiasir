@@ -15,7 +15,7 @@ Los clientes envían mensajes al Broker, y éste reenvía el mensaje a los recep
 
 El topic es el tema donde se suscriben los receptores para recibir el mensaje. Lo podemos asemejar como el asunto de un email. El mensaje no tiene destinatario concreto, puede haber uno, muchos o ninguno. Aquellos clientes que estén suscritos al topic, recibirán el mensaje.
 
-<img src="../images/Mete11.png" width="600">
+<img src="../images/Meteo11.png" width="600">
 
 En nuestro proyecto, el NodeMCU leerá los datos del sensor de temperatura y humedad y los pasará por MQTT al Broker que instalaremos en la Raspberry.
 
