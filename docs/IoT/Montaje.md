@@ -13,6 +13,6 @@ El pin de alimentación (+) del sensor lo conectamos a uno de salida de 3,3V del
 
 Es importante elegir bien el pin para la programación posterior de la placa.
 
- 
+<img src="../images/Meteo10.png" width="500">
 
 Aunque la placa trabaja a 3,3V, para alimentarla podemos utilizar un cargador microUSB de 5V, como los de cualquier móvil. La propia placa tiene un regulador de tensión en elpuerto USB que la baja a 3,3V.

@@ -10,4 +10,6 @@ Sólo nos queda abrir un navegador con la dirección IP de la Raspberry Pi y aut
 
 Puesto que tiene formato responsive, podemos abrirla desde cualquier dispositivo y visualizar la curva con las últimas lecturas hechas por el sensor de temperatura y humedad.
 
+<img src="../images/Meteo2.png" width="300">
+
 El último paso sería abrir el puerto 80 de nuestro router y redireccionarlo a la IP de la Raspberry Pi para poder acceder a la web desde fuera de nuestra LAN
