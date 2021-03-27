@@ -10,4 +10,6 @@ github_docs_folder: true
 sticky_navigation: true
 prev_next_buttons_location: both
 search_enabled: false
+google_analytics: G-JVDM359CJ1
+google_analytics_anonymize_ip: true
 hljs_style: github-gist
