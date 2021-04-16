@@ -146,7 +146,7 @@ Es un script muy sencillo que llama al programa que envía el inventario pasánd
 
 Descargamos el siguiente archivo zip en una máquina Windows 10 (pulsar en *Guardar enlace como*):
 
-[Cliente OCSInventory](./ocsinventory/OCSInventory.zip)
+[Cliente OCSInventory](./ocsinventory/OCSinventory.zip)
 
 Descomprimimos el archivo .zip y ejecutamos el script *.\inventario.ps1* (pulsamos con el botón derecho del ratón y seleccionamos la opción Ejecutar con PowerShell).
 
