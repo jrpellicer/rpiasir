@@ -14,6 +14,8 @@ Todos estos nodos se organizan en flujos o flows que agrupan nodos que se conect
 
 En nuestro proyecto vamos a trabajar con un nodo que será la recepción del mensaje MQTT, el resultado se le pasará a otro nodo que extraerá la información, la procesará y la enviará a otro nodo que generará una consulta SQL que finalmente atacará sobre un último nodo que escribirá la información en una BBDD MySQL.
 
+<img src="../images/Meteo12.png">
+
 Comenzamos con la instalación de Node Red en nuestra Raspberry Pi. Vamos a utilizar también un contenedor para su instalación.
 
 Creamos un directorio de trabajo para el almacenamiento persistente de los datos de contenedor:
@@ -30,7 +32,11 @@ Si se nos queda en primer plano, podemos detenerlo con CTRL+C y luego volver a e
 
 Para acceder al entorno de trabajo, abrimos un navegador y accedemos a la dirección de la Raspberry por el puerto 1880
 
+<img src="../images/Meteo13.png">
+
 En primer lugar vamos a instalar una extensión para poder tener un nodo que nos permita leer y escribir en una base de datos MySQL. Para ello accedemos al menú (icono de las 3 líneas horizontales en la parte superior derecha de la ventana) y accedemos a la opción Settings y dentro de ella, a la pestaña Palette. Buscamos en el recuadro la palabra mysql e instalamos la librería.
+
+<img src="../images/Meteo14.png" width="600">
 
 Una vez instalada, procedemos a la creación de nuestro flujo. Para ello comenzamos poniendo 4 nodos de los siguientes tipos:
 - mqtt in
