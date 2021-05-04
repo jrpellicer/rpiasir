@@ -25,7 +25,7 @@ Docker se ha convertido en una herramienta popular, que funciona tanto en Window
 ## Instalación de Docker
 El proceso de instalación de Docker en una Raspberry Pi es similar al de un ordenador de escritorio o servidor, pero es necesario hacer una serie de pasos debido a las características del sistema operativo funcionando bajo la arquitectura arm de la Raspberry.
 
-Hay un método rápido de instalación mediante la descarga y ejecución de un script que veremos en otro proyecto ([Docker Swarm](./p12swarm.md))
+Hay un método rápido de instalación mediante la descarga y ejecución de un script que veremos en otro proyecto ([Docker Swarm](./swarm.md))
 
 En primer lugar comprobamos la versión del sistema instalado, la release y su nombre en clave:
 
