@@ -46,15 +46,23 @@ Una vez instalada, procedemos a la creación de nuestro flujo. Para ello comenza
 
 Los unimos mediante un flujo arrastrando el conector gris de un nodo hacia el siguiente:
 
+<img src="../images/Meteo15.png" width="600">
+
 Cada nodo enviará un mensaje (msg) al siguiente nodo con un encabezado (msg.topic) y un cuerpo (msg.payload). Cada nodo que reciba el mensaje lo procesará de un modo (según el tipo de nodo) y reenviará un nuevo mensaje al siguiente nodo.
 
 Hacemos doble clic sobre ellos y comenzamos a configurarlos.
 
 Comenzamos por el nodo Mqtt in. Introducimos los datos de nuestro Broker (la dirección IP de la Raspberry y el puerto 1883 por defecto) y el topic al que deseamos suscribirnos. En nuestro caso nos suscribimos al topic casa/estacion/# donde el símbolo # indica que estamos suscritos a los subtopics que cuelguen de casa/estacion, dejando así preparada la lectura de los mensajes enviados por varios clientes mqtt que utilicen el topic casa/estacion:
 
+<img src="../images/Meteo16.png" width="400">
+
 En el nodo csv configuramos para decir que el mensaje recibido son 2 campos separados por comas que corresponden a la Temperatura y Humedad que envió el sensor.
 
+<img src="../images/Meteo17.png" width="400">
+
 En el siguiente nodo creamos una función a partir de los datos recibidos para que el mensaje que le pase al siguiente nodo tenga una instrucción SQL en su cabecera. Esta instrucción SQL será la que insertará en la BBDD la fila con los datos leídos:
+
+<img src="../images/Meteo18.png" width="400">
 
 Tecleamos la siguiente función en javascript:
 
@@ -75,5 +83,9 @@ return msg;
 
 Por último, editamos el último nodo con la BBDD Mysql. Asignamos un nombre y configuramos la conexión:
 
+<img src="../images/Meteo19.png" width="400">
+<img src="../images/Meteo20.png" width="400">
+
 Una vez creados y configurados los nodos, sólo nos queda pulsar sobre el botón Deploy. Si todo ha ido bien, ya está en marcha nuestro flujo de trabajo esperando a recibir un mensaje mqtt de nuestro Broker para procesarlo y almacenarlo en la BBDD. Con unos pocos clics y una pequeña función de javascript nos hemos olvidado de tener que programar eventos, configurar protocolos, servicios, instalar librerías de programación, etc.
 
+<img src="../images/Meteo21.png">
