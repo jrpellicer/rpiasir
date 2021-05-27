@@ -119,20 +119,24 @@ Conectamos el segundo disco, también a un puerto USB 3. Raspbian lo reconocerá
     ├─mmcblk0p1 179:1    0  256M  0 part  /boot
     └─mmcblk0p2 179:2    0 14.2G  0 part  /
 
-Tenemos los 2 discos conectados como */dev/sda* y */dev/sdb*, y las particiones NTFS que hay creadas en cada uno de esos discos son */dev/sda1* y */dev/sdb1*.
+Tenemos los 2 discos conectados como */dev/sda* y */dev/sdb*, y en este caso hay 2 particiones NTFS creadas en los discos son */dev/sda1* y */dev/sdb1* pero que no las vamos a utilizar.
 
 ## Instalación de MDADM
 Vamos a proceder a instalar el paquete *MDADM* (Multiple Device Administrator), que es un conjunto de herramientas que son utilizadas en GNU/Linux para la gestión del RAID.
 
 MDADM viene instalado en algunas distribuciones Linux por defecto (en las Servers normalmente) pero no en Raspbian.
 
+Vamos a trabajar con el usuario *root* para simplificar los comandos.
+
+    $ sudo su
+
 En primer lugar actualizamos los repositorios:
 
-    $ sudo apt-get update
+    # apt-get update
 
 Instalamos el paquete llamado mdam:
 
-    $ sudo apt-get install mdadm
+    # apt-get install mdadm
 
 ## Creación del RAID-0
 Una vez instalado el paquete mdadm ya podemos podemos crear los siguientes tipos de RAID: RAID 0, RAID 1, RAID 4, RAID 5, RAID 6 y RAID 10.
@@ -143,13 +147,23 @@ Con el siguiente comando creamos un RAID-0 en un nuevo dispositivo de disco (*/d
 
 **OJO**. Si alguno de los 2 discos tuviera alguna tabla de partición, el sistema nos avisa de que será eliminada, y por tanto las particiones existentes se borrarán, y con ellas todos los datos.
 
-    $ sudo mdadm --create /dev/md0 --level=0 --raid-devices=2 /dev/sda /dev/sdb
+    # mdadm --create /dev/md0 --level=0 --raid-devices=2 /dev/sda /dev/sdb
 
 Si nos aparece alguna advertencia, la podemos pasar por alto pulsando *y*.
 
+En algunas ocasiones, dependiendo de los discos, puede darnos un error durante la creación del disco del tipo:
+
+    mdadm: RUN_ARRAY failed: Unknown error 524
+
+Si sucediera este error habría que eliminar el raid creado, ejecutar un comando y volver a crearlo:
+    
+    # mdadm --stop /dev/md0
+    # echo 1 > /sys/module/raid0/parameters/default_layout
+    # mdadm --create /dev/md0 --level=0 --raid-devices=2 /dev/sda /dev/sdb
+
 El RAID comienza a construirse. Se puede ver el estado de progreso ejecutando lo siguiente:
 
-    $ sudo mdadm --detail /dev/md0
+    # mdadm --detail /dev/md0
 
 Cuando haya finalizado (dependiendo del tamaño de los discos puede tardar unos minutos), en el estado (state) aparecerá active o clean. En *Rsync Status* aparece el progreso.
 
@@ -158,18 +172,22 @@ Una vez creado el conjunto RAID se nos crea un nuevo dispositivo con el nombre q
 
 Para poder trabajar con el nuevo dispositivo */dev/md0* debemos crear un sistema de archivos ext4 en el mismo:
 
-    $ sudo mkfs.ext4 /dev/md0
+    # mkfs.ext4 /dev/md0
 
 Este es un proceso costoso que también puede tardar unos minutos dependiendo del tamaño de los discos.
 Una vez creado el sistema de archivos, procedemos al montaje.
 
 Vamos a utilizar el mismo directorio que hemos creado antes (*/media/disco_ext*) para el montaje del primer disco. En este caso ya montamos el nuevo dispositivo /dev/md0. Utilizamos el comando *mount*.
 
-    $ sudo mount /dev/md0 /media/disco_ext
+    # mount /dev/md0 /media/disco_ext
 
 Cambiamos el usuario propietario y el grupo propietario del directorio que acabamos de crear para que en lugar de ser *root* sea nuestro usuario (*pi*). Esto nos facilitará la gestión de permisos y el poder escribir en el disco una vez montado.
 
-    $ sudo chown pi:pi /media/disco_ext/ -R
+    # chown pi:pi /media/disco_ext/ -R
+
+Cerramos sesión de root:
+
+    # exit
 
 ## Comprobación del funcionamiento
 Finalizado el proceso de creación, comprobamos con el mandato *lsblk* la lista de dispositivos:
