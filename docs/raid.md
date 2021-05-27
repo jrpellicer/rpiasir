@@ -158,6 +158,7 @@ En algunas ocasiones, dependiendo de los discos, puede darnos un error durante l
 Si sucediera este error habría que eliminar el raid creado, ejecutar un comando y volver a crearlo:
     
     # mdadm --stop /dev/md0
+    # mdadm --remove /dev/md0
     # echo 1 > /sys/module/raid0/parameters/default_layout
     # mdadm --create /dev/md0 --level=0 --raid-devices=2 /dev/sda /dev/sdb
 
