@@ -66,9 +66,12 @@ Ejecutamos *fdisk* y comprobamos las particiones:
     Device     Boot Start      End  Sectors  Size Id Type
     /dev/sda1        8192 30294015 30285824 14.5G  c W95 FAT32 (LBA)
 
+
+Podríamos también crear una nueba tabla de particiones y reparticionar el disco con el mandato *fdisk* en caso de que el disco no estuviera particionado a nuestro gusto.
+
 En este caso hay un disco */dev/sda* de 15.5 GiB (16GB) con una única partición que ocupa todo el disco y formateada en FAT32. Si el disco no estuviera formateado, habría que hacerlo con el mandato *mkfs*:
 
-    $ sudo mkfs /dev/sda1
+    $ sudo mkfs.ext4 /dev/sda1
 
 Vamos a medir la velocidad de escritura. Para ello es necesario montar el disco. En primer lugar creamos un directorio en /media llamado *disco_ext* donde montaremos el disco:
 
@@ -155,7 +158,7 @@ Una vez creado el conjunto RAID se nos crea un nuevo dispositivo con el nombre q
 
 Para poder trabajar con el nuevo dispositivo */dev/md0* debemos crear un sistema de archivos ext4 en el mismo:
 
-    $ sudo mkfs /dev/md0
+    $ sudo mkfs.ext4 /dev/md0
 
 Este es un proceso costoso que también puede tardar unos minutos dependiendo del tamaño de los discos.
 Una vez creado el sistema de archivos, procedemos al montaje.
