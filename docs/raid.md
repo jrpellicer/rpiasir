@@ -168,7 +168,7 @@ El RAID comienza a construirse. Se puede ver el estado de progreso ejecutando lo
 
 Cuando haya finalizado (dependiendo del tamaño de los discos puede tardar unos minutos), en el estado (state) aparecerá active o clean. En *Rsync Status* aparece el progreso.
 
-##CREACIÓN DEL SISTEMA DE ARCHIVOS Y MONTAJE
+## Creación del sistema de archivos y montaje
 Una vez creado el conjunto RAID se nos crea un nuevo dispositivo con el nombre que le hemos dado (/dev/md0).
 
 Para poder trabajar con el nuevo dispositivo */dev/md0* debemos crear un sistema de archivos ext4 en el mismo:
