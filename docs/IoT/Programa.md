@@ -1,6 +1,7 @@
 ---
 layout: page
 title: Programación de la estación
+parent: Proyecto IoT
 nav_order: 10
 ---
 # Programación de la estación

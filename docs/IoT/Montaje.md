@@ -1,6 +1,7 @@
 ---
 layout: page
 title: Montaje componentes estación
+parent: Proyecto IoT
 nav_order: 4
 ---
 

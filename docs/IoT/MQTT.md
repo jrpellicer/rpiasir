@@ -1,6 +1,7 @@
 ---
 layout: page
 title: Instalación Broker MQTT
+parent: Proyecto IoT
 nav_order: 6
 ---
 # Instalación Broker MQTT en Raspberry Pi

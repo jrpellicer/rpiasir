@@ -1,6 +1,7 @@
 ---
 layout: page
 title: Acceso a la estación
+parent: Proyecto IoT
 nav_order: 12
 ---
 # Acceso a la estación

@@ -1,6 +1,7 @@
 ---
 layout: page
 title: Instalación MySQL
+parent: Proyecto IoT
 nav_order: 7
 ---
 # Instalación MySQL

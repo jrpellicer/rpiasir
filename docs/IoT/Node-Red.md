@@ -1,6 +1,7 @@
 ---
 layout: page
 title: Instalación Node-Red
+parent: Proyecto IoT
 nav_order: 8
 ---
 # Instalación Node-Red

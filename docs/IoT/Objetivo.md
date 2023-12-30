@@ -1,7 +1,8 @@
 ---
 layout: page
-title: Objetivo del proyecto IoT
-nav_order: 1
+title: Proyecto IoT
+nav_order: 16
+has_children: true
 ---
 # Objetivo del proyecto IoT
 

@@ -1,6 +1,7 @@
 ---
 layout: page
 title: Elementos necesarios
+parent: Proyecto IoT
 nav_order: 2
 ---
 # Elementos necesarios

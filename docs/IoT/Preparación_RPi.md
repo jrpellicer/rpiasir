@@ -1,6 +1,7 @@
 ---
 layout: page
 title: Preparación Raspberry Pi
+parent: Proyecto IoT
 nav_order: 5
 ---
 

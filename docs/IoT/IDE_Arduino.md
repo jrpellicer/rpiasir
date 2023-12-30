@@ -1,6 +1,7 @@
 ---
 layout: page
 title: Preparación entorno IDE Arduino
+parent: Proyecto IoT
 nav_order: 3
 ---
 # Preparación entorno IDE Arduino
