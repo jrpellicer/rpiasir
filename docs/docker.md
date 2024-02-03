@@ -3,7 +3,18 @@ layout: page
 title: Docker
 nav_order: 5
 ---
-# DOCKER
+# Docker
+{: .no_toc }
+
+<details open markdown="block">
+  <summary>
+    Tabla de contenidos
+  </summary>
+  {: .text-delta }
+- TOC
+{:toc}
+</details>
+
 
 ## Virtualización a nivel de Sistema Operativo
 Cuando hablamos de virtualización podemos hacer referencia a muchas técnicas distintas que se utilizan para abstraer el hardware del ordenador como si fuera una máquina totalmente autónoma. Se hace a partir del encapsulamiento proporcionado por una capa de software que funciona de una manera u otra dependiendo de la técnica que empleemos para virtualizar. Una de estas técnicas de virtualización de sistemas es la virtualización a nivel de sistema operativo (Operating-system-level virtualization).
@@ -23,31 +34,9 @@ Existen varias soluciones de virtualización a nivel de sistema operativo. Algun
 Docker se ha convertido en una herramienta popular, que funciona tanto en Windows, como Linux y MacOS. Es potente, ligera y con una gran cantidad de imágenes (plantillas) disponibles en la red sobre la que crear contenedores.
 
 ## Instalación de Docker
-El proceso de instalación de Docker en una Raspberry Pi es similar al de un ordenador de escritorio o servidor, pero es necesario hacer una serie de pasos debido a las características del sistema operativo funcionando bajo la arquitectura arm de la Raspberry.
+El proceso de instalación de Docker en una Raspberry Pi es similar al de un ordenador de escritorio o servidor, pero es necesario hacer una serie de pasos debido a las características del sistema operativo funcionando bajo la arquitectura ARM de la Raspberry.
 
-Hay un método rápido de instalación mediante la descarga y ejecución de un script que veremos en otro proyecto ([Docker Swarm](./swarm.md))
-
-En primer lugar comprobamos la versión del sistema instalado, la release y su nombre en clave:
-
-    $ cat /etc/debian_version
-    10.1
-
-    $ cat /etc/os-release
-    PRETTY_NAME="Raspbian GNU/Linux 10 (buster)"
-    NAME="Raspbian GNU/Linux"
-    VERSION_ID="10"
-    VERSION="10 (buster)"
-    VERSION_CODENAME=buster
-    ID=raspbian
-    ID_LIKE=debian
-    HOME_URL="http://www.raspbian.org/"
-    SUPPORT_URL="http://www.raspbian.org/RaspbianForums"
-    BUG_REPORT_URL="http://www.raspbian.org/RaspbianBugs"
-
-    $ lsb_release -cs
-    buster
-
-Ya sabemos que tenemos un sistema operativo de nombre raspbian basado en la versión 10.1 de Debian (cuyo nombre en clave es buster). Nos hará falta saberlo para descargar Docker.
+Hay un método rápido de instalación mediante la descarga y ejecución de un script que será el que utilicemos en el proyecto de Docker Swarm.
 
 El proceso comienza descargando una serie de paquetes necesarios:
 
@@ -56,7 +45,7 @@ El proceso comienza descargando una serie de paquetes necesarios:
 
 A continuación obtenemos la clave firmada para la descarga de los paquetes de Docker:
 
-    $ curl -fsSL https://download.docker.com/linux/raspbian/gpg | sudo apt-key add -
+    $ sudo curl -fsSL https://download.docker.com/linux/raspbian/gpg -o /etc/apt/keyrings/docker.asc
 
 Añadimos el repositorio oficial de Docker a nuestra lista de repositorios (aquí ponemos de manera automática la release que estamos gastando y de manera manual la arquitectura de la raspberry - armhf-):
 
@@ -65,20 +54,24 @@ Añadimos el repositorio oficial de Docker a nuestra lista de repositorios (aqu�
 Procedemos con la instalación de Docker:
 
     $ sudo apt update
-    $ sudo apt install docker-ce
+    $ sudo apt install docker-ce -y
 
-Sólo queda activar el servicio para que se ejecute en el arranque e iniciarlo:
+Sólo queda activar el servicio para que se ejecute en el arranque y reiniciarlo:
 
     $ sudo systemctl enable docker
-    $ sudo systemctl start docker
+    $ sudo systemctl restart docker
 
-Si deseamos ejecutar Docker con un usuario sin privilegios debemos añadir dicho usuario al grupo docker. En nuestro caso se trata del usuario pi y lo hacemos con el lanzamiento del siguiente comando:
+{: .note }
+> Con el método rápido de instalación, todos los comandos anteriores los podríamos haber omitido ejecutando simplemente el siguiente comando, que ejecuta todos los pasos anteriores por nosotros:
+>
+>    `$ sudo su`
+>
+>    `# curl –fsSL https://get.docker.com/ | sh`
+
+
+Si deseamos ejecutar Docker con un usuario sin privilegios debemos añadir dicho usuario al grupo docker. En nuestro caso se trata del usuario *pi* y lo hacemos con el lanzamiento del siguiente comando:
 
     $ sudo usermod -aG docker pi
-
-Una vez añadido, reiniciamos el demonio de Docker con:
-
-    $ sudo systemctl restart docker
 
 Para que los cambios surtan efecto en nuestro sistema debemos cerrar sesión y volver a entrar.
 
@@ -161,13 +154,13 @@ Podemos comprobar que se ha descargado automáticamente la imagen de Debian:
 
     $ docker images
 
-Una vez creado el contenedor se ejecutará dentro del mismo la orden cat/etc/debian_version. Como este comando termina su ejecución de visualizar la versión de la distribución, el contenedor se detendrá. Las opciones -ti indican que se ha de iniciar el contenedor con la posibilidad de acceder al terminal (-t) y que se ha de iniciar el contenedor en modo intearctivo (-i).
+Una vez creado el contenedor se ejecutará dentro del mismo la orden *cat/etc/debian_version* que le hemos indicado al final del comando *docker run*. Como este comando termina su ejecución de visualizar la versión de la distribución, el contenedor se detendrá. Las opciones -ti indican que se ha de iniciar el contenedor con la posibilidad de acceder al terminal (-t) y que se ha de iniciar el contenedor en modo intearctivo (-i).
 
 Para ver los contenedores que tenemos arrancados ejecutamos el siguiente comando:
 
     $ docker ps
 
-Nos muestra que no hay ningún contenedor iniciado, pues el que hemos arrancado, al ejecutar el comando que le hemos dicho (cat /etc/debian_version), se ha detenido. Podemos ver todos los contenedores creados con la opción -a y veremos que ahora sí que nos aparece, pero con status finalizado (exited):
+Nos muestra que no hay ningún contenedor iniciado, pues el que hemos arrancado, al ejecutar el comando que le hemos dicho (*cat /etc/debian_version*), se ha detenido. Podemos ver todos los contenedores creados con la opción -a y veremos que ahora sí que nos aparece, pero con status finalizado (exited):
 
     $ docker ps -a
 
@@ -201,9 +194,9 @@ Con la opción -dit lanzamos el contenedor en modo background, para que se ejecu
 
 Antes de probarlo vamos a crear una página de muestra en el directorio que habíamos creado para comprobar que todo funciona. Para crear el fichero index.html en el directorio en el que nos encontramos tecleamos lo siguiente:
 
-    $ echo '<html><body><h1>Hola Mundo!</h1></html>' > www/index.html
+    $ echo '<html><body><h1>Hola Mundo!</h1></body></html>' > www/index.html
 
-Tras unos segundos podemos acceder mediante un navegador a la dirección de la Raspberry por el puerto 80 (o el que le hayamos indicado), y al haber mapeado el puerto de nuestra Raspberry con el del contenedor estaremos accediendo al puerto 80 del servidor que estamos virtualizando. Debemos visualizar el mensaje que hayamos puesto en el fichero index.html
+Tras unos segundos podemos acceder mediante un navegador a la dirección de la Raspberry por el puerto 80 (o el que le hayamos indicado), y al haber mapeado el puerto de nuestra Raspberry con el del contenedor estaremos accediendo al puerto 80 del servidor que estamos virtualizando. Debemos visualizar el mensaje que hayamos puesto en el fichero *index.html*
 
 ## Portainer
 Portainer es una interfaz de usuario web que nos permite administrar fácilmente nuestro host Docker y todos los contenedores que en él habitan. Portainer tiene como una de sus ventajas principales su facilidad de uso. Consiste en un solo contenedor que puede ejecutarse en cualquier motor de Docker o un cluster Swarm, tanto en Linux, como en Windows, o incluso una Raspberry Pi.
@@ -222,15 +215,17 @@ Desde la interfaz web podremos crear, arrancar, parar o eliminar contenedores, a
 
 Una aplicación imprescindible para la gestión de Docker.
 
-## Coder
-Coder es un proyecto gratuito y de código abierto que convierte un Raspberry Pi en una plataforma sencilla que se puede utilizar para enseñar los fundamentos de la programación web. Es un entorno de desarrollo web que funciona en un navegador en el que se pueden crear pequeños proyectos en HTML, CSS y JavaScript, directamente desde el navegador web.
+## Juguemos al 2048
+En el ejemplo anterior hemos visto cómo ejecutar un servicio (el servidor web) en un contenedor y que utilizábamos para servir una web alojada en un directorio de nuestra raspberry. Una característica importante de los contenedores es que podemos tener contenerizados no solo los servicios, sino aplicaciones completas, junto con los servicios neceserarios para ser ejecutados, en un mismo contenedor.
 
-Para instalar Coder podemos optar por una instalación clásica, descargando e instalando los paquetes necesarios, o en nuestro caso, optamos por la descarga de un contenedor en el que ya está instalado Coder.
+En el siguiente ejemplo vamos a correr un contenedor que lleva un servidor web junto con las páginas necesarias (HTML y CSS).
 
 Para descargar la imagen y ejecutar el contenedor ejecutamos el siguiente mandato:
 
-    $ docker run -d -p 8081:8081 resin/rpi-google-coder
+    $ docker run -d -p 80:80 amigoscode/2048
 
-Para trabajar con él, accedemos mediante un navegador a la dirección de nuestra Raspberry, pero ojo, mediante una conexión https y por el puerto 8081
+{: .warning }
+Si el puerto 80 de la Raspberry está siendo ocupado por el contenedor qye hemos ejecutado antes con el servidor web, docker nos informará del error y no arrancará este nuevo contenedor. Lo podemos solucionar eliminando previamente el contendor web, o ejecutando este nuevo contenedor redireccionando el puerto 8080 de la Raspberry al puerto 80 del contenedor: `docker run -d -p 8080:80 amigoscode/2048`
 
-Nos pedirá que confirmemos la excepción de seguridad, y tras hacerlo ya podemos validarnos en el Coder de nuestra RPi.
+Para trabajar con él, accedemos mediante un navegador a la dirección de nuestra Raspberry. En caso de haber redireccionado el puerto, se lo debremos indicar al final de la url añadiendo `:8080`
+
