@@ -4,8 +4,19 @@ title: GPIO
 nav_order: 4
 ---
 # Los puertos GPIO
+{: .no_toc }
 
 Interactuando con el mundo exterior a través de los puertos GPIO de nuestra Raspberry Pi.
+
+<details open markdown="block">
+  <summary>
+    Tabla de contenidos
+  </summary>
+  {: .text-delta }
+- TOC
+{:toc}
+
+
 
 ## Los pines GPIO
 
@@ -29,7 +40,8 @@ Los pines GPIO tienen funciones específicas (aunque algunos comparten funciones
 - **Verde** (2): Destinados a conexión para UART para puerto serie convencional.
 - **Morado** (5): Comunicación mediante el protocolo SPI para comunicarse con periféricos que siguen este protocolo.
 
-**Todos los pines son de tipo "unbuffered", es decir, no disponen de buffers de protección y podemos dañar la placa con un mal uso.**
+{: .warning }
+Todos los pines son de tipo "unbuffered", es decir, no disponen de buffers de protección y podemos dañar la placa con un mal uso.
 
 ![Croquis pines](./images/0203.png)
 
@@ -45,8 +57,10 @@ De los pines GPIO disponibles, hay una serie de pines con capacidad de PWM (simu
  
 **Advertencias**
 
+{: .warning }
 Cuando se utilizan los pines de GPIO hay que poner mucho cuidado para no dañar la propia Raspberry Pi. Es muy importante comprobar los niveles de tensión y la corriente solicitada. Los pines de GPIO pueden generar y consumir tensiones compatibles con los circuitos de 3.3V, como la nueva electrónica. No conectar nunca componentes de 5V, o podemos quemar el chip y dañar la Raspberry Pi.
 
+{: .warning }
 Hay que tener presente que la intensidad de corriente que sale de esos pines proviene de la fuente de 3.3V y esta fue diseñada para una carga de unos 3mA por cada pin GPIO, suficiente para encender diodos led, pero poco más.
 
 ## Conexión de un sistema de refrigeración
@@ -100,25 +114,25 @@ Vamos a utilizar el mandato *echo* para escribir, y redireccionaremos con el sí
 
 Lo primero que vamos a hacer es indicar qué pines son accesibles. Vamos a seguir la numeración BCM. Queremos tener acceso al GPIO 17, así que introducimos el siguiente comando:
 
-    pi@raspberrypi:~ $ echo 17 > /sys/class/gpio/export
+    echo 17 > /sys/class/gpio/export
 
 Tras esto, el sistema ha creado un archivo con una estructura GPIO que corresponde al número 17. A continuación, tenemos que informar a la Raspberry Pi de si el pin va a ser de salida (out) o de entrada (in). Como lo que queremos es encender un LED, el GPIO 17 será de salida. Introducimos el siguiente comando:
 
-    pi@raspberrypi:~ $ echo out > /sys/class/gpio/gpio17/direction
+     echo out > /sys/class/gpio/gpio17/direction
 
 Con esto, el sistema ya sabe que el pin será de salida. Ahora tendremos que darle valores. Existen dos posibles: '0' y '1'.
 
 Para encender el LED:
 
-    pi@raspberrypi:~ $ echo 1 > /sys/class/gpio/gpio17/value
+    echo 1 > /sys/class/gpio/gpio17/value
 
 Para apagar el LED:
 
-    pi@raspberrypi:~ $ echo 0 > /sys/class/gpio/gpio17/value
+    echo 0 > /sys/class/gpio/gpio17/value
 
 Una vez hayamos acabado de encender y apagar el LED, tendremos que eliminar la entrada GPIO creada, es decir, el GPIO 17. Para ello introduciremos el siguiente comando:
 
-    pi@raspberrypi:~ $ echo 17 > /sys/class/gpio/unexport
+    echo 17 > /sys/class/gpio/unexport
 
 
 ## Control de los puertos GPIO mediante Python
@@ -143,7 +157,7 @@ Podemos elegir cualquier pin. Por ejemplo elegimos los siguientes:
 
 Una vez tenemos las conexiones, vamos a programar el control del semáforo. En primer lugar creamos con el editor de texto un fichero con la extensión .py que albergará el código fuente del programa:
 
-    pi@raspberrypi:~ $ nano semaforo.py
+    nano semaforo.py
 
 Tecleamos dentro el siguiente programa:
 
@@ -190,10 +204,10 @@ Tecleamos dentro el siguiente programa:
 
 Una vez creado, guardamos el fichero y ejecutamos el programa con la siguiente instrucción:
 
-    pi@raspberrypi:~ $ python semaforo.py
+    python semaforo.py
 
 O bien lo ejecutamos en segundo plano añadiendo el símbolo & al final de la línea:
 
-    pi@raspberrypi:~ $ python semaforo.py &
+    python semaforo.py &
 
 

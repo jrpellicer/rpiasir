@@ -3,9 +3,19 @@ layout: page
 title: Disco DAS
 nav_order: 7
 ---
-# DISCO DAS
+# Disco DAS
+{: .no_toc }
 
 Conexión de un disco DAS a nuestra Raspberry Pi
+
+<details open markdown="block">
+  <summary>
+    Tabla de contenidos
+  </summary>
+  {: .text-delta }
+- TOC
+{:toc}
+</details>
 
 ## DAS (Direct Attached Storage)
 Ya conocemos los 3 modos de conexión del almacenamiento a los servidores. Estas 3 tecnologías son **DAS** (Direct Attached Storage), **NAS** (Network Attached Storage) y **SAN** (Storage Area Network). 
@@ -98,14 +108,14 @@ En este caso hay un disco */dev/sda* de 1TB (931GB) con una única partición qu
 
 Vamos a montarlo. En primer lugar creamos un directorio en */media* llamado *disco_ext* donde montaremos el disco:
 
-    $ sudo mkdir /media/disco_ext
+    sudo mkdir /media/disco_ext
 
 Procedemos al montaje indicando la partición que queremos montar y el directorio donde será montado:
 
-    $ sudo mount /dev/sda1 /media/disco_ext
+    sudo mount /dev/sda1 /media/disco_ext
 
 Y ya está listo para ser utilizado. Habrá que tener ojo con los permisos, puesto que los mandatos los hemos hecho con el sudo, y por consiguiente el propietario del directorio será root.
 
 Para desmontar el disco, estando en una localización fuera del mismo, tecleamos:
 
-    $ sudo umount /dev/sda1
+    sudo umount /dev/sda1

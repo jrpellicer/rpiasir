@@ -4,7 +4,16 @@ title: NAS con SMB
 nav_order: 9
 ---
 
-# DISCO NAS CON SMB
+# Disco NAS con SMB
+{: .no_toc }
+
+<details open markdown="block">
+  <summary>
+    Tabla de contenidos
+  </summary>
+  {: .text-delta }
+- TOC
+{:toc}
 
 ## SAMBA
 Windows utiliza un protocolo de archivos compartidos llamado CIFS que es el que permite compartir archivos, carpetas, impresoras y demás recursos en una red de equipos Windows. Este protocolo antiguamente se llamaba SMB, y es de este nombre de donde sale el nombre de Samba. Samba es una implementación libre del protocolo CIFS para sistemas Unix/Linux de manera que es posible que ordenadores con Linux, Mac OS X o Unix se vean como servidores o actúen como clientes en redes de Windows.
@@ -35,39 +44,44 @@ Observamos que el disco */dev/sda* no está montado de manera automática. Tendr
 
 Vamos a montarlo. En primer lugar creamos un directorio en */media* llamado *disco_ext* donde montaremos el disco:
 
-    $ sudo mkdir /media/disco_ext
+    sudo mkdir /media/disco_ext
 
 Procedemos al montaje indicando la partición que queremos montar y el directorio donde será montado:
 
-    $ sudo mount /dev/sda1 /media/disco_ext
+    sudo mount /dev/sda1 /media/disco_ext
 
 Y ya está listo para ser utilizado. Habrá que tener ojo con los permisos, puesto que los mandatos los hemos hecho con el sudo, y por consiguiente el propietario del directorio será root.
 
-**ATENCIÓN**. Si apagamos la Raspberry o la reiniciamos, habrá que volver a montar el disco, a no ser que escribamos en */etc/fstab*.
+{: .warning }
+Si apagamos la Raspberry o la reiniciamos, habrá que volver a montar el disco, a no ser que escribamos en */etc/fstab*.
 
 Para que se monte cada vez de manera automática tecleamos:
 
-    $ sudo bash –c “echo ‘/dev/sda1 /media/disco_ext ext4 defaults 0 0’ >> /etc/fstab”
+    echo ‘/dev/sda1 /media/disco_ext ext4 defaults 0 0’ | sudo tee -a /etc/fstab
 
 ## Instalación de SAMBA
-En primer lugar instalamos Samba con apt-get:
-
-    $ sudo apt-get update     
-    $ sudo apt-get install samba
+En primer lugar instalamos Samba con apt:
+```
+sudo apt update   
+```
+```
+sudo apt install samba
+```
 
 Comprobamos si el servicio está ejecutándose una vez se ha instalado:
 
-    $ sudo service smbd status
+    sudo systemctl status smbd
+
 Debe aparecer como que el servicio está running (ejecutándose).
 
 Y comprobamos también la versión instalada:
 
-    $ smbd --version
+    smbd --version
 
 ## Configuración de SAMBA
 Una vez hechas las comprobaciones de que el SMB está instalado y corriendo, vamos a configurarlo. Para ello vamos a modificar el archivo *smb.conf*:
 
-    $ sudo nano /etc/samba/smb.conf
+    sudo nano /etc/samba/smb.conf
 
 Comprobamos que en la sección \[global\] aparece el nombre del grupo de trabajo que tenemos en nuestra red Windows (por defecto es WORKGROUP):
 
@@ -82,7 +96,7 @@ Nos vamos al final del fichero y añadimos una nueva sección:
     writable = yes
     valid users = @samba
 
-Estamos indicando que la carpeta a compartir es la que en su momento llamamos Compartida en la raíz del disco duro. Ello lo hacemos indicando la ruta de la carpeta en el parámetro path.
+Estamos indicando que la carpeta a compartir es la que en su momento llamamos *Compartida* en la raíz del disco duro. Ello lo hacemos indicando la ruta de la carpeta en el parámetro path.
 
 En los demás parámetros estamos indicando los permisos de acceso y forzando a que los únicos usuarios que pueden acceder son los que están incluidos en el grupo samba.
 
@@ -90,39 +104,42 @@ Una vez cambiado el archivo de configuración indicando el recurso a compartir, 
 
 En primer lugar creamos el grupo samba que es el que hemos indicado en el archivo de configuración que tiene acceso al recurso compartido:
 
-    $ sudo groupadd samba
+    sudo groupadd samba
 
 A continuación creamos un usuario con el que conectarnos. Podríamos llamarlo igual que el usuario de Windows desde donde queremos acceder (en este ejemplo pongo smbuser):
 
-    $ sudo adduser smbuser
+    sudo adduser smbuser
 
 Nos habrá pedido un password durante el proceso de creación del usuario. Además hay que separar esta contraseña de la propia de acceso de samba. En nuestro caso ponemos la misma. Ejecutamos:
 
-    $ sudo smbpasswd -a smbuser
+    sudo smbpasswd -a smbuser
 
 Añadimos el usuario creado al grupo samba creado anteriormente.
 
-    $ sudo gpasswd -a smbuser samba
+    sudo usermod smbuser -aG samba
 
 El grupo samba necesita tener permisos de lectura, escritura y ejecución en la carpeta compartida (*/media/disco_ext/Compartida*). Se los damos ejecutando el comando setfacl. El modelo de permisos que se ha empleado desde la creación de Linux se denomina DAC (Control de Acceso Discrecional). En el sector de la seguridad se considera insuficiente. Existen otros modelos como ACL (comandos setfacl o getfacl), MAC y RBAC (utilidad SELinux). En este caso utilizamos el modelo ACL. Como estos comandos no vienen instalados por defecto, previamente ejecutamos:
 
-    $ sudo apt-get install acl
+    sudo apt install acl
 
 Y luego ya asignamos los permisos:
 
-    $ sudo setfacl -R -m "g:samba:rwx" /media/ disco_ext/Compartida
+    sudo setfacl -R -m "g:samba:rwx" /media/ disco_ext/Compartida
 
 Sólo nos queda reiniciar el servicio para que los cambios tengan efecto:
 
-    $ sudo systemctl restart smbd
+    sudo systemctl restart smbd
 
-## Acceso desde WINDOWS
+## Acceso desde Windows
 Una vez instalado y configurado, podemos ir a un equipo Windows, y en el explorador de archivos acceder a la Red. Desde ahí podemos entrar en la Raspberry, y mediante los credenciales que configuramos en Samba, acceder a los recursos compartidos.
 
 Es posible que de primeras no nos aparezca la Raspberry en la Red de Windows. Podemos forzar la conexión a una Unidad de Red. Para ello abrimos una consola de comandos de Windows y tecleamos lo siguiente (sustutuyendo la IP por la de la Raspberry y el password por el que le pusimos):
-
-    > net use \\192.168.1.136\Compartida /delete
-    > net use \\192.168.1.136\Compartida /user:smbuser password
+```
+net use \\192.168.1.136\Compartida /delete
+```
+```
+net use \\192.168.1.136\Compartida /user:smbuser password
+```
 
 Es interesante asignarle una unidad de Red (por ejemplo la Z:) de manera que cada vez que arranque el ordenador Windows aparezca la conexión a la carpeta compartida de la Raspberry.
 

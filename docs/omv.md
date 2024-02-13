@@ -3,7 +3,17 @@ layout: page
 title: NAS con OMV
 nav_order: 8
 ---
-# DISCO NAS CON OMV
+# Disco NAS con OMV
+{: .no_toc }
+
+<details open markdown="block">
+  <summary>
+    Tabla de contenidos
+  </summary>
+  {: .text-delta }
+- TOC
+{:toc}
+</details>
 
 ## OpenMediaVault
 OpenMediaVault (OMV) es una solución de software libre que corre bajo Linux diseñada para almacenamiento conectado a la red (NAS) con una administración bajo un entorno amigable vía web.
@@ -36,25 +46,11 @@ OMV incorpora las siguientes características:
 ## Instalación de OpenMediaVault
 Para la instalación de OMV podemos optar por descargar una imagen de Raspbian con OMV ya instalado y listo para ejecutar, o partir de una instalación de Raspbian e instalar manualmente OMV.
 
-Vamos a hacer la instalación manual. Para ello, una vez arrancada la RPi y conectados mediante ssh procedemos a ejecutar los siguientes comandos.
+Vamos a hacer la instalación manual. Para ello, una vez arrancada la RPi y conectados mediante ssh procedemos a ejecutar el siguiente comando:
 
-En primer lugar actualizamos los repositorios:
+    wget -O - https://github.com/OpenMediaVault-Plugin-Developers/installScript/raw/master/install | sudo bash
 
-    $ sudo apt-get update
-
-A continuación actualizamos el sistema operativo:
-
-    $ sudo apt-get upgrade
-
-(en un momento dado deberemos pulsar q)
-
-Reiniciamos el sistema:
-
-    $ sudo reboot
-
-Descargamos desde el repositorio de GitHub el script de instalación y lo ejecutamos:
-
-    $ wget -O - https://github.com/OpenMediaVault-Plugin-Developers/installScript/raw/master/install | sudo bash
+El comando descarga desde el repositorio de GitHub el script de instalación y lo ejecuta automáticamente.
 
 ## Acceso a OMV
 Una vez instalada y puesta en marcha la aplicación, accedemos vía web a la Raspberry.
