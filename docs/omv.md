@@ -46,11 +46,22 @@ OMV incorpora las siguientes características:
 ## Instalación de OpenMediaVault
 Para la instalación de OMV podemos optar por descargar una imagen de Raspbian con OMV ya instalado y listo para ejecutar, o partir de una instalación de Raspbian e instalar manualmente OMV.
 
-Vamos a hacer la instalación manual. Para ello, una vez arrancada la RPi y conectados mediante ssh procedemos a ejecutar el siguiente comando:
+Vamos a hacer la instalación manual. Para ello, una vez arrancada la RPi y conectados mediante ssh procedemos a ejecutar los siguientes comandos:
+```
+wget https://github.com/OpenMediaVault-Plugin-Developers/installScript/raw/master/install
+```
+```
+chmod +x install
+```
+```
+sudo ./install -n
+```
 
-    wget -O - https://github.com/OpenMediaVault-Plugin-Developers/installScript/raw/master/install | sudo bash
+El primer comando descarga desde el repositorio de GitHub el script de instalación.
 
-El comando descarga desde el repositorio de GitHub el script de instalación y lo ejecuta automáticamente.
+El segundo comando asigna permisos deejecución al script.
+
+El tercer comando ejecuta el script pasándole el parámetro `-n` para que no configure la red y la deje con la configuración actual. De no hacerlo así, la configuración de la red cambiaría y no podríamos conectarnos por wifi.
 
 ## Acceso a OMV
 Una vez instalada y puesta en marcha la aplicación, accedemos vía web a la Raspberry.
