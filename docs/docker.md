@@ -55,14 +55,20 @@ Añadimos el repositorio oficial de Docker a nuestra lista de repositorios (aqu�
     sudo tee /etc/apt/sources.list.d/docker.list > /dev/null
 
 Procedemos con la instalación de Docker:
-
-    $ sudo apt update
-    $ sudo apt install docker-ce -y
+```
+sudo apt update
+```
+```
+$ sudo apt install docker-ce -y
+```
 
 Sólo queda activar el servicio para que se ejecute en el arranque y reiniciarlo:
-
-    sudo systemctl enable docker
-    sudo systemctl restart docker
+```
+sudo systemctl enable docker
+```
+```
+sudo systemctl restart docker
+```
 
 {: .note }
 > Con el método rápido de instalación, todos los comandos anteriores los podríamos haber omitido ejecutando simplemente el siguiente comando, que ejecuta todos los pasos anteriores por nosotros:
