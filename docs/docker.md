@@ -45,11 +45,11 @@ El proceso comienza descargando una serie de paquetes necesarios:
 
 A continuación obtenemos la clave firmada para la descarga de los paquetes de Docker:
 
-    $ sudo curl -fsSL https://download.docker.com/linux/raspbian/gpg -o /etc/apt/keyrings/docker.asc
+    $ sudo curl -fsSL https://download.docker.com/linux/debian/gpg -o /etc/apt/keyrings/docker.asc
 
 Añadimos el repositorio oficial de Docker a nuestra lista de repositorios (aquí ponemos de manera automática la release que estamos gastando y de manera manual la arquitectura de la raspberry - armhf-):
 
-    $ echo "deb [arch=armhf] https://download.docker.com/linux/raspbian $(lsb_release -cs) stable" | sudo tee -a /etc/apt/sources.list.d/docker.list
+    $ echo "deb [arch=armhf] https://download.docker.com/linux/debian $(lsb_release -cs) stable" | sudo tee -a /etc/apt/sources.list.d/docker.list
 
 Procedemos con la instalación de Docker:
 
