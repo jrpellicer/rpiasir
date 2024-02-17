@@ -40,16 +40,19 @@ Hay un método rápido de instalación mediante la descarga y ejecución de un s
 
 El proceso comienza descargando una serie de paquetes necesarios:
 
-    $ sudo apt update
-    $ sudo apt install -y apt-transport-https ca-certificates curl gnupg2 software-properties-common
+    sudo apt update
+    sudo apt install -y apt-transport-https ca-certificates curl gnupg2 software-properties-common
 
 A continuación obtenemos la clave firmada para la descarga de los paquetes de Docker:
 
-    $ sudo curl -fsSL https://download.docker.com/linux/debian/gpg -o /etc/apt/keyrings/docker.asc
+    sudo curl -fsSL https://download.docker.com/linux/debian/gpg -o /etc/apt/keyrings/docker.asc
 
 Añadimos el repositorio oficial de Docker a nuestra lista de repositorios (aquí ponemos de manera automática la release que estamos gastando y de manera manual la arquitectura de la raspberry - armhf-):
 
-    $ echo "deb [arch=armhf] https://download.docker.com/linux/debian $(lsb_release -cs) stable" | sudo tee -a /etc/apt/sources.list.d/docker.list
+    echo \
+    "deb [arch=$(dpkg --print-architecture) signed-by=/etc/apt/keyrings/docker.asc] https://download.docker.com/linux/debian \
+    $(. /etc/os-release && echo "$VERSION_CODENAME") stable" | \
+    sudo tee /etc/apt/sources.list.d/docker.list > /dev/null
 
 Procedemos con la instalación de Docker:
 
@@ -58,26 +61,26 @@ Procedemos con la instalación de Docker:
 
 Sólo queda activar el servicio para que se ejecute en el arranque y reiniciarlo:
 
-    $ sudo systemctl enable docker
-    $ sudo systemctl restart docker
+    sudo systemctl enable docker
+    sudo systemctl restart docker
 
 {: .note }
 > Con el método rápido de instalación, todos los comandos anteriores los podríamos haber omitido ejecutando simplemente el siguiente comando, que ejecuta todos los pasos anteriores por nosotros:
 >
->    `$ sudo su`
+>    `sudo su`
 >
->    `# curl –fsSL https://get.docker.com/ | sh`
+>    `curl –fsSL https://get.docker.com/ | sh`
 
 
 Si deseamos ejecutar Docker con un usuario sin privilegios debemos añadir dicho usuario al grupo docker. En nuestro caso se trata del usuario *pi* y lo hacemos con el lanzamiento del siguiente comando:
 
-    $ sudo usermod -aG docker pi
+    sudo usermod -aG docker pi
 
 Para que los cambios surtan efecto en nuestro sistema debemos cerrar sesión y volver a entrar.
 
 Para ver que Docker está funcionando podemos empezar por comprobar la información del servidor docker mediante la acción info:
 
-    $ docker info
+    docker info
 
 ## Imágenes en Docker
 Para trabajar con contenedores es necesario conocer el concepto de imágenes. Un contenedor depende de una imagen para funcionar. Cuando se crea un contenedor se basa en el contenido de una imagen, como si fuera una plantilla base. Los cambios y tareas que se realicen en el contenedor solo se verán reflejados en el mismo, y no en la imagen original.
@@ -90,18 +93,18 @@ Existen multitud de imágenes listas para ser descargadas en el Hub de docker (h
 
 En primer lugar podemos comprobar qué imágenes tenemos descargadas:
 
-    $ docker images
+    docker images
 
 Obviamente si acabamos de instalar docker no nos aparecerá ninguna imagen descargada en nuestro equipo.
 Para eliminar imágenes de nuestro disco utilizamos el mandato rmi. El único requisito es que no exista ningún contenedor asociado a la imagen que queremos eliminar:
 
-    $ docker rmi imagen
+    docker rmi imagen
 
 Para buscar imágenes del repositorio oficial lo podemos hacer de 2 maneras. La primera consiste en acceder a la web del Hub de Docker (https://hub.docker.com/) y ahí buscar la imagen deseada. Nos dirá el nombre de la misma y el comando (pull) a ejecutar para la descarga.
 
 La otra opción es la de buscarla directamente desde la línea de mandatos mediante el comando search. Vamos a buscar las imágenes que aparezcan con la palabra http (servidor web):
 
-    $ docker search --limit 5 http
+    docker search --limit 5 http
 
 Le estamos indicando que sólo nos muestre los 5 primeros resultados de la búsqueda. El resultado es el siguiente:
 
@@ -114,17 +117,17 @@ Le estamos indicando que sólo nos muestre los 5 primeros resultados de la búsq
 
 Una vez localizada la imagen que deseamos, sólo falta descargarla mediante el comando pull. En nuestro caso el nombre es httpd:
 
-    $ docker pull httpd
+    docker pull httpd
 
 Comprobamos que la tenemos descargada:
 
-    $ docker images
+    docker images
 
 Es interesante comprobar la información que nos muestra, como el ID de imagen y el tamaño de la misma.
 
 Y si deseáramos borrar la imagen:
 
-    $ docker rmi httpd
+    docker rmi httpd
 
 
 ## Contenedores
@@ -146,23 +149,23 @@ Es importante el mapeo de puertos, en el que si es necesario que nuestro contene
 
 Como ejemplo:
 
-    $ docker run -ti debian cat /etc/debian_version
+    docker run -ti debian cat /etc/debian_version
 
 Este comando creará un contenedor y lo ejecutará a partir de una imagen llamada debian. Si la imagen no está descargada, automáticamente docker la descargará del repositorio.
 
 Podemos comprobar que se ha descargado automáticamente la imagen de Debian:
 
-    $ docker images
+    docker images
 
 Una vez creado el contenedor se ejecutará dentro del mismo la orden *cat/etc/debian_version* que le hemos indicado al final del comando *docker run*. Como este comando termina su ejecución de visualizar la versión de la distribución, el contenedor se detendrá. Las opciones -ti indican que se ha de iniciar el contenedor con la posibilidad de acceder al terminal (-t) y que se ha de iniciar el contenedor en modo intearctivo (-i).
 
 Para ver los contenedores que tenemos arrancados ejecutamos el siguiente comando:
 
-    $ docker ps
+    docker ps
 
 Nos muestra que no hay ningún contenedor iniciado, pues el que hemos arrancado, al ejecutar el comando que le hemos dicho (*cat /etc/debian_version*), se ha detenido. Podemos ver todos los contenedores creados con la opción -a y veremos que ahora sí que nos aparece, pero con status finalizado (exited):
 
-    $ docker ps -a
+    docker ps -a
 
     CONTAINER ID        IMAGE               COMMAND                  CREATED             STATUS                     PORTS               NAMES
     5236ee7ce660        debian              "cat /etc/debian_ver…"   5 minutes ago       Exited (0) 5 minutes ago                       magical_keller
@@ -173,28 +176,28 @@ Podemos utilizar este ID y nombre para referenciarlos. A la hora de utilizar el 
 
 Para borrar un contenedor utilizamos el mandato rm e identificaremos el contenedor a eliminar con los primeros dígitos del ID:
 
-    $ docker rm 523
+    docker rm 523
 
 ## Servidor WEB
 Vamos a crear y correr un contenedor con un servidor web. Vamos a contenerizar el servidor web Apache, de manera que se ejecute en un entorno aislado, sin interferir con otros servidores web que pudiéramos estar corriendo en nuestra máquina.
 
 En primer lugar descargamos la imagen del servidor web Apache desde el hub de Docker. Este paso no es necesario, pues ya hemos visto que al crear un contenedor se descargaría automáticamente la imagen indicada en caso de no estar ya descargada. La imagen del servidor web Apache se llama httpd.
 
-    $ docker pull httpd
+    docker pull httpd
 
 Puesto que vamos a contenerizar un servidor web, vamos a crear primero un directorio en el que almacenaremos los ficheros de la página web. Aunque no es el lugar donde debería ir, ese directorio lo vamos a crear en nuestra carpeta personal (que si no hemos cambiado de directorio es donde nos encontramos). Lo llamamos www:
 
-    $ mkdir www
+    mkdir www
 
 El siguiente paso es crear e iniciar  el contenedor con el comando run:
 
-    $ docker run -dit --name servidor-apache -p 80:80 -v "$PWD"/www:/usr/local/apache2/htdocs/ httpd
+    docker run -dit --name servidor-apache -p 80:80 -v "$PWD"/www:/usr/local/apache2/htdocs/ httpd
 
 Con la opción -dit lanzamos el contenedor en modo background, para que se ejecute en segundo plano y nos permita terminal. Le asignamos un nombre (servidor-apache en este caso), redireccionamos el puerto 80 del contenedor al puerto 80 de nuestra Raspberry, y mapeamos el directorio que habíamos creado ($PWD/www) al directorio del contenedor que contendrá la raíz de nuestra web (/usr/local/apache2/htdocs). Lo último que le indicamos es la imagen que debe coger para crear el contenedor (httpd).
 
 Antes de probarlo vamos a crear una página de muestra en el directorio que habíamos creado para comprobar que todo funciona. Para crear el fichero index.html en el directorio en el que nos encontramos tecleamos lo siguiente:
 
-    $ echo '<html><body><h1>Hola Mundo!</h1></body></html>' > www/index.html
+    echo '<html><body><h1>Hola Mundo!</h1></body></html>' > www/index.html
 
 Tras unos segundos podemos acceder mediante un navegador a la dirección de la Raspberry por el puerto 80 (o el que le hayamos indicado), y al haber mapeado el puerto de nuestra Raspberry con el del contenedor estaremos accediendo al puerto 80 del servidor que estamos virtualizando. Debemos visualizar el mensaje que hayamos puesto en el fichero *index.html*
 
@@ -203,9 +206,9 @@ Portainer es una interfaz de usuario web que nos permite administrar fácilmente
 
 Puesto que Portainer se ejecuta como un contenedor ligero, para instalarlo basta con ejecutar las 2 siguientes líneas:
 
-    $ docker volume create portainer_data
+    docker volume create portainer_data
 
-    $ docker run -d -p 9000:9000 -v /var/run/docker.sock:/var/run/docker.sock -v portainer_data:/data portainer/portainer
+    docker run -d -p 9000:9000 -v /var/run/docker.sock:/var/run/docker.sock -v portainer_data:/data portainer/portainer
 
 Y una vez instalado acceder mediante un navegador a la dirección IP de nuestro host por el puerto :9000
 
@@ -222,7 +225,7 @@ En el siguiente ejemplo vamos a correr un contenedor que lleva un servidor web j
 
 Para descargar la imagen y ejecutar el contenedor ejecutamos el siguiente mandato:
 
-    $ docker run -d -p 80:80 amigoscode/2048
+    docker run -d -p 80:80 amigoscode/2048
 
 {: .warning }
 Si el puerto 80 de la Raspberry está siendo ocupado por el contenedor qye hemos ejecutado antes con el servidor web, docker nos informará del error y no arrancará este nuevo contenedor. Lo podemos solucionar eliminando previamente el contendor web, o ejecutando este nuevo contenedor redireccionando el puerto 8080 de la Raspberry al puerto 80 del contenedor: `docker run -d -p 8080:80 amigoscode/2048`
