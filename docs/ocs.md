@@ -4,7 +4,15 @@ title: OCS Inventory
 nav_order: 12
 ---
 # OCS Inventory
+{: .no_toc }
 
+<details open markdown="block">
+  <summary>
+    Tabla de contenidos
+  </summary>
+  {: .text-delta }
+- TOC
+{:toc}
 
 ## OCS Inventory
 OCS Inventory es una aplicación de software libre que nos va a permitir tener un inventario siempre actualizado de todos los activos TIC. OCS recopila información de manera automática sobre el hardware y software de equipos que hay en la red que ejecutan el programa cliente (el agente OCS). OCS nos permite visualizar el inventario a través de una interfaz web. Además, tiene muchas opciones más como escanear la red por medio del IPDiscovery, o instalar aplicaciones remotamente creando Builds.
@@ -14,7 +22,9 @@ Nosotros vamos a instalar este software en nuestra Raspberry Pi, haciendo ésta 
 La instalación del servidor es algo compleja, pues para funcionar este programa necesita que instalemos un servidor web (Apache en nuestro caso), un gestor de base de datos (MariaDB en nuestro caso) y muchas librerías y paquetes de PERL en nuestra RPi.
 
 Además de instalar los paquetes, habrá que configurar el servidor web Apache y el gestor de BBDD MariaDB.
+
 Por último, habrá que descargar el propio programa OCS Inventory, descomprimirlo y configurarlo.
+
 Son unos cuantos pasos que, aunque no son difíciles de entender, pueden darnos algún problema y son un poco costosos.
 
 ## Instalación del servidor OCS Inventory en la RPi
@@ -22,25 +32,25 @@ Como se ha comentado, el proceso de instalación de OCS Inventory en la raspberr
 
 Vayamos por pasos. En primer lugar actualizamos los repositorios:
 
-    pi@raspberrypi:~ $ sudo apt-get update
+    sudo apt update
 
 Instalamos el servidor web Apache, el lenguaje PHP y otros paquetes necesarios:
 
-    pi@raspberrypi:~ $ sudo apt install apache2 libapache2-mod-perl2 php php-curl php-mbstring php-soap php-xml php-pclzip php-mysql php-zip php-gd make build-essential
+    sudo apt install apache2 libapache2-mod-perl2 php php-curl php-mbstring php-soap php-xml php-pclzip php-mysql php-zip php-gd make build-essential
 
-    pi@raspberrypi:~ $ sudo apt install libxml-simple-perl libperl5.28 libdbi-perl libdbd-mysql-perl libapache-dbi-perl libnet-ip-perl libsoap-lite-perl libarchive-zip-perl libyaml-perl
+    sudo apt install libxml-simple-perl libperl5.28 libdbi-perl libdbd-mysql-perl libapache-dbi-perl libnet-ip-perl libsoap-lite-perl libarchive-zip-perl libyaml-perl
 
 Instalamos otros paquetes necesarios relacionados con Perl (proceso costoso):
 
-    pi@raspberrypi:~ $ sudo cpan -i XML::Entities Compress::Zlib Archive::Zip Mojolicious::Lite Switch Plack::Handler
+    sudo cpan -i XML::Entities Compress::Zlib Archive::Zip Mojolicious::Lite Switch Plack::Handler
 
 A continuación instalamos el gestor de base de datos MariaDB:
 
-    pi@raspberrypi:~ $ sudo apt-get install mariadb-server
+    sudo apt install mariadb-server
 
 Configuramos el usuario y la contraseña del administrador de la BBDD:
 
-    pi@raspberrypi:~ $ sudo mysql
+    sudo mysql
 
     MariaDB [(none)]>
     CREATE USER IF NOT EXISTS 'ocsuser'@'localhost' IDENTIFIED BY 'ocspassword';
@@ -54,28 +64,28 @@ Configuramos el usuario y la contraseña del administrador de la BBDD:
 
 Llega el momento de descargar el fichero *tar.bz2* con el programa OCS Inventory. Lo descargamos con el comando *wget* desde el repositorio de Git Hub:
 
-    pi@raspberrypi:~ $ sudo wget https://github.com/OCSInventory-NG/OCSInventory-ocsreports/releases/download/2.5/OCSNG_UNIX_SERVER_2.5.tar.gz
+    sudo wget https://github.com/OCSInventory-NG/OCSInventory-ocsreports/releases/download/2.5/OCSNG_UNIX_SERVER_2.5.tar.gz
 
 Descomprimimos el fichero *tar.bz2* descargado:
 
-    pi@raspberrypi:~ $ sudo tar -zxvf OCSNG_UNIX_SERVER_2.5.tar.gz
+    sudo tar -zxvf OCSNG_UNIX_SERVER_2.5.tar.gz
 
 Ejecutamos el script de instalación:
 
-    pi@raspberrypi:~ $  cd OCSNG_UNIX_SERVER_2.5/
-    pi@raspberrypi:~ $  sudo ./setup.sh
+     cd OCSNG_UNIX_SERVER_2.5/
+     sudo ./setup.sh
 
 Creamos un enlace a al fichero de configuración del sitio web en al que entraremos para ver los informes pero en otra ubicación:
 
-    pi@raspberrypi:~ $ sudo ln -s /etc/apache2/conf-available/ocsinventory-reports.conf /etc/apache2/sites-enabled/ocsinventory-reports.conf
+    sudo ln -s /etc/apache2/conf-available/ocsinventory-reports.conf /etc/apache2/sites-enabled/ocsinventory-reports.conf
 
 Repetimos la operación pero para el sitio donde se almacenarán los datos por parte del agente:
 
-    pi@raspberrypi:~ $ sudo ln -s /etc/apache2/conf-available/z-ocsinventory-server.conf /etc/apache2/sites-enabled/z-ocsinventory-server.conf
+    sudo ln -s /etc/apache2/conf-available/z-ocsinventory-server.conf /etc/apache2/sites-enabled/z-ocsinventory-server.conf
 
 Reiniciamos el servidor web Apache:
 
-    pi@raspberrypi:~ $ sudo service apache2 restart
+    sudo service apache2 restart
 
 ## Finalización de la instalación vía Web
 Ya tenemos instalado el servidor, vamos a acabar de configurar el sitio web. Para ello, desde un ordenador con acceso a la red de nuestra Raspberry abrimos el navegador y accedemos a la dirección de la RPi:
@@ -88,7 +98,7 @@ Nos avisa de unos warnings. El primero tiene que ver con el tamaño máximo de f
 
 El segundo warning está ralacionado con los permisos de escritura en la carpeta /var/lib/ocsinventory-reports. Para eliminar esta advertencia tecleamos:
 
-    pi@raspberrypi:~ $ sudo chown www-data:www-data -R /var/lib/ocsinventory-reports
+    sudo chown www-data:www-data -R /var/lib/ocsinventory-reports
 
 Rellenamos los campos que nos solicita con los parámetros que pusimos al crear la base de datos:
 - MySQL login: **ocsuser**
@@ -108,11 +118,11 @@ Una vez validados, vemos que nos da una alerta de que existe el fichero de insta
 
 Para eliminar (renombrar) el fichero podemos ejecutar el siguiente mandato en el servidor:
 
-    pi@raspberrypi:~ $ sudo mv /usr/share/ocsinventory-reports/ocsreports/install.php /usr/share/ocsinventory-reports/ocsreports/install.php_old
+    sudo mv /usr/share/ocsinventory-reports/ocsreports/install.php /usr/share/ocsinventory-reports/ocsreports/install.php_old
 
 Y por último modificamos el fichero de configuración para que los inventarios se puedan subir de manera automática:
 
-    pi@raspberrypi:~ $ sudo nano /etc/apache2/conf-available/z-ocsinventory-server.conf
+    sudo nano /etc/apache2/conf-available/z-ocsinventory-server.conf
 
 Modificamos el fichero para poner el usuario y contraseña que especificamos al crear la base de datos. Se encuentran en las líneas donde aparece **OCS_DB_USER** y **OCS_DB:PWD**:
 
@@ -135,7 +145,7 @@ Modificamos el fichero para poner el usuario y contraseña que especificamos al 
 
 Reiniciamos el servidor web:
 
-    pi@raspberrypi:~ $ sudo service apache2 restart
+    sudo service apache2 restart
 
 ## Instalación del agente en los clientes
 Para enviar de manera automática el inventario de un equipo a nuestro recién instalado servidor debemos ejecutar en el equipo cliente un agente. Dependiendo del sistema operativo instalado debemos descargar desde la página web oficial uno de los programas clientes válidos para nuestro cliente.

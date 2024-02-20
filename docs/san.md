@@ -4,6 +4,15 @@ title: Disco SAN
 nav_order: 10
 ---
 # Disco SAN
+{: .no_toc }
+
+<details open markdown="block">
+  <summary>
+    Tabla de contenidos
+  </summary>
+  {: .text-delta }
+- TOC
+{:toc}
 
 ## SAN (Storage Area Network)
 Ya conocemos los 3 modos de conexión del almacenamiento a los servidores. Estas 3 tecnologías son **DAS** (Direct Attached Storage), **NAS** (Network Attached Storage) y **SAN** (Storage Area Network). 
@@ -12,13 +21,13 @@ Tanto en DAS (Direct Attached Storage) como en SAN (Storage Area Network), las a
 
 <img src="./images/0501.png" width="650">
 
-Una red de área de almacenamiento, en inglés SAN (Storage Area Network), es una red concebida para conectar servidores, arrays de discos y librerías de soporte. Principalmente, está basada en tecnología fibre channel y más recientemente en iSCSI. Su función es la de conectar de manera rápida, segura y fiable los distintos elementos que la conforman. Una red SAN es utilizada para transportar datos entre servidores y recursos de almacenamiento. **El servidor accederá al dispositivo de almacenamiento mediante una conexión de red sin saber que está accediendo a un disco remoto.**
+Una red de área de almacenamiento, en inglés SAN (Storage Area Network), es una red concebida para conectar servidores, arrays de discos y librerías de soporte. Principalmente, está basada en tecnología fibre channel (FC) y más recientemente en iSCSI. Su función es la de conectar de manera rápida, segura y fiable los distintos elementos que la conforman. Una red SAN es utilizada para transportar datos entre servidores y recursos de almacenamiento. **El servidor accederá al dispositivo de almacenamiento mediante una conexión de red sin saber que está accediendo a un disco remoto.**
 
 La tecnología SAN permite conectividad de alta velocidad, de servidor a almacenamiento, almacenamiento a almacenamiento, o servidor a servidor.
 
 La principal diferencia entre una NAS y una SAN es que la SAN sirve los datos a bajo nivel a través de protocolos SCSI con tecnologías como fibre channel o iSCSI. Los equipos conectados a la SAN no solicitan los ficheros sino que como están conectados a bajo nivel solicitan el bloque concreto de un determinado disco. La máquina local conectada a una SAN verá el disco/compartición de la SAN como si fuera un disco/sistema de archivos local en lugar de uno remoto.
 
-Para conectar el servidor y el medio de almacenamiento se utilizan normalmente 2 protocolos de red: iSCSI y Fibre Channel.
+Para conectar el servidor y el medio de almacenamiento se utilizan normalmente 2 protocolos de red: iSCSI y Fibre Channel (FC).
 - **iSCSI**: (léase “iescasi”) es un estándar que permite el uso del protocolo SCSI sobre redes TCP/IP. Surgió para optimizar la velocidad de transferencia del flujo de datos través de la red. Este protocolo funciona directamente sobre TCP/IP aprovechando la infraestructura Ethernet existente, siempre que cumpla con unos requisitos de calidad. Desde el punto de vista de los drivers y las aplicaciones de software, los dispositivos parecen estar conectados realmente como dispositivos SCSI locales.
 Al contrario que otros protocolos de red diseñados para almacenamiento, como por ejemplo el canal de fibra, solamente requiere una simple y sencilla interfaz Ethernet (o cualquier otra red compatible TCP/IP) para funcionar. Esto permite una solución de almacenamiento centralizada de bajo coste sin la necesidad de realizar inversiones costosas ni sufrir las habituales incompatibilidades asociadas a las soluciones canal de fibra para redes de área de almacenamiento.
 - **FC (Fibre Channel o Canal de Fibra)**: Es una tecnología de red de alta velocidad que funciona bajo fibra óptica.
@@ -29,24 +38,24 @@ En un disco SAN necesitamos dos elementos, en el lado del servidor tendremos el 
 
 En esta práctica vamos a simular con la Raspberry Pi el lado servidor, para ello conectaremos un disco duro extraíble por el conector USB e instalaremos la aplicación del Target iSCSI.
 
-Por otro lado, utilizaremos un equipo con Windows 10 como cliente, en el que haremos uso de la característica ya instalada de Iniciador iSCSI para acceder al disco conectado a la RPi como si de un disco local se tratara.
+Por otro lado, utilizaremos un equipo con Windows 10/11 como cliente, en el que haremos uso de la característica ya instalada de Iniciador iSCSI para acceder al disco conectado a la RPi como si de un disco local se tratara.
 
 ## Instalación del Target iSCSI
 Partimos de una Raspberry Pi con el sistema operativo Raspbian instalado. Vamos a proceder a instalar el paquete para crear y administrar un Target iSCSI.
 
 En primer lugar actualizamos los repositorios:
 
-    $ sudo apt-get update
+    sudo apt update
 
 Instalamos el paquete llamado Target Framework (tgt):
 
-    $ sudo apt-get install tgt
+    sudo apt install tgt
 
 Para crear un Target iSCSI lo conveniente es trabajar con LUNs (Logical Unit Number) montados sobre volúmenes lógicos, en los que ampliar o reducir LUNs es muy sencillo y flexible. Por simplicidad, nosotros vamos a crear el Destino iSCSI directamente sobre el disco extraíble conectado a la RPi.
 
 Conectamos el disco extraíble al puerto USB de la RPi. Comprobamos que Raspbian lo ha detectado (no lo ha montado). Ejecutamos el siguiente mandato:
 
-    $ lsblk
+    lsblk
 
 Nos debe aparecer la siguiente información (o parecida):
 
@@ -65,15 +74,15 @@ Para configurar el Target lo que vamos a hacer es modificar el archivo que conti
 
 Lo editamos con el editor nano:
 
-    $ sudo nano /etc/tgt/conf.d/asir99_iscsi.conf
+    sudo nano /etc/tgt/conf.d/asir99_iscsi.conf
 
 Y ponemos el siguiente contenido:
 
-    <target iqn.2020-02.es.iescamp:rpi99>
+    <target iqn.2024-02.es.iescamp:rpi99>
         backing-store /dev/sda1
     </target>
 
-Este archivo admite muchos parámetros para toda la configuración del Target, pero por hacerlo más sencillo únicamente ponemos el nombre del destino (*iqn.2020-02.es.iescamp:rpi99*) y especificamos el dispositivo que estamos exportando (*/dev/sda1*).
+Este archivo admite muchos parámetros para toda la configuración del Target, pero por hacerlo más sencillo únicamente ponemos el nombre del destino (*iqn.2024-02.es.iescamp:rpi99*) y especificamos el dispositivo que estamos exportando (*/dev/sda1*).
 
 Podemos poner el nombre del destino que queramos, pero debe ser un IQN (iSCSI Qualified Name) válido.
 
@@ -88,17 +97,17 @@ Donde:
 
 Un ejemplo de IQN sería:
 
-    iqn.2020-01.com.dominio:Servidor01
+    iqn.2024-01.com.dominio:Servidor01
 
 Una vez guardado el archivo de configuración, reiniciamos el servicio:
 
-    $ sudo service tgt restart
+    sudo systemctl restart tgt
 
 Podemos comprobar que todo ha ido bien y el target está disponible:
 
     $ sudo tgtadm --mode target --op show
 
-    Target 1: iqn.2020-02.es.iescamp:rpi99
+    Target 1: iqn.2024-02.es.iescamp:rpi99
         System information:
             Driver: iscsi
             State: ready

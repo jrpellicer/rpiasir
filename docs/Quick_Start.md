@@ -280,8 +280,11 @@ Si lo hacemos desde una máquina Windows: (estos mismos pasos funcionan desde un
 >La clave pública hay que incluirla en el archivo **authorized_keys** dentro de un directorio llamado *.ssh* de la carpeta personal del usuario pi (*/home/pi/.ssh/authorized_keys*). Como la carpeta *.*ssh* no existe, la creamos antes de copiar, así como el archivo *authorized_keys*:
 >
 >    `pi@asir1rpi01:~ $ mkdir .ssh`
+>
 >    `pi@asir1rpi01:~ $ chmod 700 .ssh`
+>
 >    `pi@asir1rpi01:~ $ touch .ssh/authorized_keys`
+>
 >    `pi@asir1rpi01:~ $ chmod 644 .ssh/authorized_keys`
 >
 >Una ve creados los ficheros necesarios copiamos el contenido del fichero que acabamos de subir al fichero */home/pi/.ssh/authorized_keys* que acabamos de crear:

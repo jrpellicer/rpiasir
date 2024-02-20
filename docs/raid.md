@@ -4,6 +4,15 @@ title: Disco RAID
 nav_order: 11
 ---
 # RAID
+{: .no_toc }
+
+<details open markdown="block">
+  <summary>
+    Tabla de contenidos
+  </summary>
+  {: .text-delta }
+- TOC
+{:toc}
 
 ## RAID-0
 Existen diversas manera de prevenir pérdidas de datos en los sistemas de almacenamiento mediante sistemas tolerantes a fallos, así, si se produce un error en el disco, el sistema es capaz de continuar trabajando sin que se resienta y sin producir pérdidas de información.
@@ -18,7 +27,7 @@ Los sistemas redundantes RAID por software presentan un rendimiento inferior a l
 
 Las configuraciones de RAID más conocidas y utilizadas son el RAID-0, RAID-1 y RAID-5, pero no son las únicas. En esta práctica nos vamos a centrar en **RAID-0**.
 
-El RAID-0 se le conoce también como volumen distribuido o bandas de datos (data striping). Se forma uniendo 2 discos, y el volumen resultante tiene como tamaño la suma de los tamaños de los 2 discos originales. La información a almacenar se distribuirá por los 2 discos a partes iguales de manera que se utilizan los 2 discos por igual, mejorando de esta manera el rendimiento pero no respetando la integridad de los datos, de manera que si uno de los 2 discos falla, todo el volumen se viene abajo, implicando la pérdida total de los datos.
+El RAID-0 se le conoce también como volumen distribuido o bandas de datos (*data striping*). Se forma uniendo 2 discos, y el volumen resultante tiene como tamaño la suma de los tamaños de los 2 discos originales. La información a almacenar se distribuirá por los 2 discos a partes iguales de manera que se utilizan los 2 discos por igual, mejorando de esta manera el rendimiento pero no respetando la integridad de los datos, de manera que si uno de los 2 discos falla, todo el volumen se viene abajo, implicando la pérdida total de los datos.
 
 ![RAID0](./images/0901.png)
 
@@ -26,17 +35,17 @@ El RAID-0 se le conoce también como volumen distribuido o bandas de datos (data
 
 **Inconvenientes:** No es verdaderamente un disco RAID ya que no presenta integridad de los datos. Un error en uno de los discos implica la pérdida total de los datos.
 
+{: .note }
 Para la realización de esta práctica sería deseable poder ver los RAIDs con discos duros extraíbles conectados a la Raspberry Pi. Esto implica una serie de inconvenientes. El primero es que necesitamos formatear los discos, borrando todo aquello que pudieran contener. El segundo inconveniente es que necesitamos que los discos sean iguales. Y el principal inconveniente viene por las propias limitaciones de la Raspberry Pi. Los discos duros extraíbles se alimentan por el conector USB. La potencia necesaria varía de unos modelos de discos a otros, y también dependen de si el disco está en reposo o está haciendo operaciones de lectura y/o escritura. Si los discos no tienen alimentación externa y conectamos 2 discos a los puertos USB de la Raspberry Pi, es probable que nuestra Raspberry no tenga potencia suficiente (incluso alimentándola con un cargador de 3 A) para sostener a los 2 discos. El límite es de 1,2 A en los puertos USB, lo cual puede ser suficiente para un disco, pero no para dos.
 
-Por todo ello, vamos a hacer esta práctica con tarjetas SD a modo de disco duro. Si la hacemos por grupos de 3 alumnos podemos utilizar una Raspberry Pi donde trabajar, y las tarjetas SD de los otros 2 alumnos como Discos Duros. En este caso necesitaremos adaptadores microSD-USB para poder conectar las tarjetas microSD a los puertos USB.
+Por todo ello, **vamos a hacer esta práctica con tarjetas SD a modo de disco duro**. Si la hacemos por grupos de 3 alumnos podemos utilizar una Raspberry Pi donde trabajar, y las tarjetas SD de los otros 2 alumnos como Discos Duros. En este caso necesitaremos adaptadores microSD-USB para poder conectar las tarjetas microSD a los puertos USB.
 
-**ATENCIÓN:** El contenido de las tarjetas será eliminado.
-
+{: .warning }
+El contenido de las tarjetas será eliminado.
 
 ## Conexión del primer disco extraíble
 ### Conexión y montaje del disco
-Al igual que hicimos con la conexión de un disco DAS, vamos a conectar un disco duro extraíble directamente a la Raspberry.
-Lo conectamos a un puerto USB preferiblemente en uno de los puertos USB 3.
+Al igual que hicimos con la conexión de un disco DAS, vamos a conectar un disco duro extraíble (tarjeta SD) directamente a la Raspberry. Lo conectamos a un puerto USB preferiblemente en uno de los puertos USB 3.
 
 Raspbian lo reconocerá automáticamente. Ejecutamos *lsblk*:
 
@@ -71,15 +80,15 @@ Podríamos también crear una nueba tabla de particiones y reparticionar el disc
 
 En este caso hay un disco */dev/sda* de 15.5 GiB (16GB) con una única partición que ocupa todo el disco y formateada en FAT32. Si el disco no estuviera formateado, habría que hacerlo con el mandato *mkfs*:
 
-    $ sudo mkfs.ext4 /dev/sda1
+    sudo mkfs.ext4 /dev/sda1
 
 Vamos a medir la velocidad de escritura. Para ello es necesario montar el disco. En primer lugar creamos un directorio en /media llamado *disco_ext* donde montaremos el disco:
 
-    $ sudo mkdir /media/disco_ext
+    sudo mkdir /media/disco_ext
 
 Procedemos al montaje indicando la partición que queremos montar y el directorio donde será montado:
 
-    $ sudo mount /dev/sda1 /media/disco_ext
+    sudo mount /dev/sda1 /media/disco_ext
 
 ### Prueba de la velocidad de escritura
 Una vez está montado el disco en un directorio del sistema de ficheros ya podríamos comenzar a trabajar con él. Lo único que vamos a hacer nosotros en escribir un fichero y comprobar la velocidad de escritura.
@@ -98,15 +107,15 @@ Además, le especificamos el tamaño de bloque a copiar (64KB cada bloque) y la 
 
 Borramos el archivo creado, pues ya no lo necesitamos y ocupa 1GB (realmente no hace falta borrarlo, pues después vamos a formatear el disco y se va a perder toda la información que haya).
 
-    $ sudo rm /media/disco_ext/test
+    sudo rm /media/disco_ext/test
 
 ### Desmontaje
 Una vez medida la velocidad de escritura procedemos a desmontar el disco. Para desmontar el disco, estando en una localización fuera del mismo, tecleamos:
 
-    $ sudo umount /dev/sda1
+    sudo umount /dev/sda1
 
 ## Conexión del segundo disco extraíble
-Conectamos el segundo disco, también a un puerto USB 3. Raspbian lo reconocerá automáticamente. Ejecutamos *lsblk*:
+Conectamos el segundo disco (tarjeta SD en nuestro caso), también a un puerto USB 3. Raspbian lo reconocerá automáticamente. Ejecutamos *lsblk*:
 
     $ lsblk
 
@@ -119,7 +128,7 @@ Conectamos el segundo disco, también a un puerto USB 3. Raspbian lo reconocerá
     ├─mmcblk0p1 179:1    0  256M  0 part  /boot
     └─mmcblk0p2 179:2    0 14.2G  0 part  /
 
-Tenemos los 2 discos conectados como */dev/sda* y */dev/sdb*, y en este caso hay 2 particiones NTFS creadas en los discos son */dev/sda1* y */dev/sdb1* pero que no las vamos a utilizar.
+Tenemos los 2 discos conectados como */dev/sda* y */dev/sdb*, y en este caso hay 2 particiones creadas en los discos, son */dev/sda1* y */dev/sdb1* pero que no las vamos a utilizar.
 
 ## Instalación de MDADM
 Vamos a proceder a instalar el paquete *MDADM* (Multiple Device Administrator), que es un conjunto de herramientas que son utilizadas en GNU/Linux para la gestión del RAID.
@@ -128,15 +137,15 @@ MDADM viene instalado en algunas distribuciones Linux por defecto (en las Server
 
 Vamos a trabajar con el usuario *root* para simplificar los comandos.
 
-    $ sudo su
+    sudo su
 
 En primer lugar actualizamos los repositorios:
 
-    # apt-get update
+    apt update
 
 Instalamos el paquete llamado mdam:
 
-    # apt-get install mdadm
+    apt install mdadm
 
 ## Creación del RAID-0
 Una vez instalado el paquete mdadm ya podemos podemos crear los siguientes tipos de RAID: RAID 0, RAID 1, RAID 4, RAID 5, RAID 6 y RAID 10.
@@ -145,9 +154,10 @@ Vamos a crear un RAID-0 con los dos discos definidos como dispositivos */dev/sda
 
 Con el siguiente comando creamos un RAID-0 en un nuevo dispositivo de disco (*/dev/md0*), indicando el número de dispositivos que lo integrarán (*raid-devices=2*) y las unidades de almacenamiento que lo integrarán (*/dev/sda* y */dev/sdb*).
 
-**OJO**. Si alguno de los 2 discos tuviera alguna tabla de partición, el sistema nos avisa de que será eliminada, y por tanto las particiones existentes se borrarán, y con ellas todos los datos.
+{: .warning }
+Si alguno de los 2 discos tuviera alguna tabla de partición, el sistema nos avisa de que será eliminada, y por tanto las particiones existentes se borrarán, y con ellas todos los datos.
 
-    # mdadm --create /dev/md0 --level=0 --raid-devices=2 /dev/sda /dev/sdb
+    mdadm --create /dev/md0 --level=0 --raid-devices=2 /dev/sda /dev/sdb
 
 Si nos aparece alguna advertencia, la podemos pasar por alto pulsando *y*.
 
@@ -155,40 +165,44 @@ En algunas ocasiones, dependiendo de los discos, puede darnos un error durante l
 
     mdadm: RUN_ARRAY failed: Unknown error 524
 
-Si sucediera este error habría que eliminar el raid creado, ejecutar un comando y volver a crearlo:
-    
-    # mdadm --stop /dev/md0
-    # mdadm --remove /dev/md0
-    # echo 1 > /sys/module/raid0/parameters/default_layout
-    # mdadm --create /dev/md0 --level=0 --raid-devices=2 /dev/sda /dev/sdb
+{: .warning }
+> Si sucediera este error habría que eliminar el raid creado, ejecutar un comando y volver a crearlo:
+> `mdadm --stop /dev/md0`
+>
+> `mdadm --remove /dev/md0`
+> 
+> `echo 1 > /sys/module/raid0/parameters/default_layout`
+>
+> `mdadm --create /dev/md0 --level=0 --raid-devices=2 /dev/sda /dev/sdb`
+
 
 El RAID comienza a construirse. Se puede ver el estado de progreso ejecutando lo siguiente:
 
-    # mdadm --detail /dev/md0
+    mdadm --detail /dev/md0
 
-Cuando haya finalizado (dependiendo del tamaño de los discos puede tardar unos minutos), en el estado (state) aparecerá active o clean. En *Rsync Status* aparece el progreso.
+Cuando haya finalizado (dependiendo del tamaño de los discos puede tardar unos minutos), en el estado (*state*) aparecerá *active* o *clean*. En *Rsync Status* aparece el progreso.
 
 ## Creación del sistema de archivos y montaje
 Una vez creado el conjunto RAID se nos crea un nuevo dispositivo con el nombre que le hemos dado (/dev/md0).
 
 Para poder trabajar con el nuevo dispositivo */dev/md0* debemos crear un sistema de archivos ext4 en el mismo:
 
-    # mkfs.ext4 /dev/md0
+    mkfs.ext4 /dev/md0
 
 Este es un proceso costoso que también puede tardar unos minutos dependiendo del tamaño de los discos.
 Una vez creado el sistema de archivos, procedemos al montaje.
 
 Vamos a utilizar el mismo directorio que hemos creado antes (*/media/disco_ext*) para el montaje del primer disco. En este caso ya montamos el nuevo dispositivo /dev/md0. Utilizamos el comando *mount*.
 
-    # mount /dev/md0 /media/disco_ext
+    mount /dev/md0 /media/disco_ext
 
 Cambiamos el usuario propietario y el grupo propietario del directorio que acabamos de crear para que en lugar de ser *root* sea nuestro usuario (*pi*). Esto nos facilitará la gestión de permisos y el poder escribir en el disco una vez montado.
 
-    # chown pi:pi /media/disco_ext/ -R
+    chown pi:pi /media/disco_ext/ -R
 
 Cerramos sesión de root:
 
-    # exit
+    exit
 
 ## Comprobación del funcionamiento
 Finalizado el proceso de creación, comprobamos con el mandato *lsblk* la lista de dispositivos:
