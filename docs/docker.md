@@ -59,7 +59,7 @@ Procedemos con la instalación de Docker:
 sudo apt update
 ```
 ```
-$ sudo apt install docker-ce -y
+sudo apt install docker-ce -y
 ```
 
 Sólo queda activar el servicio para que se ejecute en el arranque y reiniciarlo:

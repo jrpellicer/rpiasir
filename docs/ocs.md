@@ -34,45 +34,51 @@ Vayamos por pasos. En primer lugar actualizamos los repositorios:
 
     sudo apt update
 
-Instalamos el servidor web Apache, el lenguaje PHP y otros paquetes necesarios:
+Instalamos el servidor web Apache:
 
-    sudo apt install apache2 libapache2-mod-perl2 php php-curl php-mbstring php-soap php-xml php-pclzip php-mysql php-zip php-gd make build-essential
-
-    sudo apt install libxml-simple-perl libperl5.28 libdbi-perl libdbd-mysql-perl libapache-dbi-perl libnet-ip-perl libsoap-lite-perl libarchive-zip-perl libyaml-perl
-
-Instalamos otros paquetes necesarios relacionados con Perl (proceso costoso):
-
-    sudo cpan -i XML::Entities Compress::Zlib Archive::Zip Mojolicious::Lite Switch Plack::Handler
+    sudo apt install apache2 -y
 
 A continuación instalamos el gestor de base de datos MariaDB:
 
-    sudo apt install mariadb-server
+    sudo apt install mariadb-server -y
 
-Configuramos el usuario y la contraseña del administrador de la BBDD:
+Instalamos los paquetes necesarios del lenguale Perl:
 
-    sudo mysql
+    sudo apt install libxml-simple-perl libdbi-perl libdbd-mysql-perl libapache-dbi-perl libnet-ip-perl libsoap-lite-perl libarchive-zip-perl make build-essential -y
 
-    MariaDB [(none)]>
-    CREATE USER IF NOT EXISTS 'ocsuser'@'localhost' IDENTIFIED BY 'ocspassword';
-    CREATE DATABASE ocsweb
-    DEFAULT CHARACTER SET utf8
-    DEFAULT COLLATE utf8_general_ci;
-    GRANT ALL PRIVILEGES ON *.* TO 'ocsuser'@'localhost' WITH GRANT OPTION;
-    SHOW GRANTS FOR 'ocsuser'@'localhost' ;
+Es el momento de instalar el lenguaje PHP y otros paquetes necesarios:
 
-    exit
+    sudo apt install php-pclzip php php-mbstring php-soap php-mysql php-curl php-xml php-zip php-gd -y
+
+Instalamos, mediante el comando *cpan* los módulos necesarios de Perl (proceso costoso):
+
+    sudo cpan -i XML::Entities Compress::Zlib Archive::Zip Mojolicious::Lite Switch Plack::Handler
+
+Una vez realizadas todas las instalaciones de los paquetes y módulos de Perl necesarios, es hora de configurar el usuario y la contraseña del administrador de la base de datos. Ejecutamos las siguientes sentencias SQL para crear la base de datos, el usuario y su contraseña:
+```
+sudo mysql
+```
+```
+CREATE USER IF NOT EXISTS 'ocsuser'@'localhost' IDENTIFIED BY 'ocspassword';
+CREATE DATABASE ocsweb
+DEFAULT CHARACTER SET utf8
+DEFAULT COLLATE utf8_general_ci;
+GRANT ALL PRIVILEGES ON *.* TO 'ocsuser'@'localhost' WITH GRANT OPTION;
+SHOW GRANTS FOR 'ocsuser'@'localhost' ;
+exit
+```
 
 Llega el momento de descargar el fichero *tar.bz2* con el programa OCS Inventory. Lo descargamos con el comando *wget* desde el repositorio de Git Hub:
 
-    sudo wget https://github.com/OCSInventory-NG/OCSInventory-ocsreports/releases/download/2.5/OCSNG_UNIX_SERVER_2.5.tar.gz
+    sudo wget https://github.com/OCSInventory-NG/OCSInventory-ocsreports/releases/download/2.12.0/OCSNG_UNIX_SERVER-2.12.0.tar.gz
 
-Descomprimimos el fichero *tar.bz2* descargado:
+Descomprimimos el fichero *tar.gz* descargado:
 
-    sudo tar -zxvf OCSNG_UNIX_SERVER_2.5.tar.gz
+    sudo tar -xvzf OCSNG_UNIX_SERVER-2.12.0.tar.gz
 
 Ejecutamos el script de instalación:
 
-     cd OCSNG_UNIX_SERVER_2.5/
+     cd OCSNG_UNIX_SERVER-2.12.0
      sudo ./setup.sh
 
 Creamos un enlace a al fichero de configuración del sitio web en al que entraremos para ver los informes pero en otra ubicación:
@@ -85,7 +91,7 @@ Repetimos la operación pero para el sitio donde se almacenarán los datos por p
 
 Reiniciamos el servidor web Apache:
 
-    sudo service apache2 restart
+    sudo systemctl restart apache2
 
 ## Finalización de la instalación vía Web
 Ya tenemos instalado el servidor, vamos a acabar de configurar el sitio web. Para ello, desde un ordenador con acceso a la red de nuestra Raspberry abrimos el navegador y accedemos a la dirección de la RPi:
@@ -150,7 +156,7 @@ Reiniciamos el servidor web:
 ## Instalación del agente en los clientes
 Para enviar de manera automática el inventario de un equipo a nuestro recién instalado servidor debemos ejecutar en el equipo cliente un agente. Dependiendo del sistema operativo instalado debemos descargar desde la página web oficial uno de los programas clientes válidos para nuestro cliente.
 
-Nosotros vamos a enviar el inventario desde una máquina **Windows 10**, pero en lugar de descargar e instalar el programa agente para que se ejecute de manera automática y periódica, vamos a descargar un script que he hecho para que sólo se envíe una vez el inventario sin necesidad de instalar ningún programa en nuestro equipo.
+Nosotros vamos a enviar el inventario desde una máquina **Windows 10/11**, pero en lugar de descargar e instalar el programa agente para que se ejecute de manera automática y periódica, vamos a descargar un script que he hecho para que sólo se envíe una vez el inventario sin necesidad de instalar ningún programa en nuestro equipo.
 
 Es un script muy sencillo que llama al programa que envía el inventario pasándole como parámetro la dirección IP de nuestra raspberry que nos solicitará por pantalla.
 
