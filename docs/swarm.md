@@ -3,7 +3,16 @@ layout: page
 title: Docker Swarm
 nav_order: 14
 ---
-# CLUSTER DE DOCKER SWARM
+# Cluster de Docker Swarm
+{: .no_toc }
+
+<details open markdown="block">
+  <summary>
+    Tabla de contenidos
+  </summary>
+  {: .text-delta }
+- TOC
+{:toc}
 
 Esta práctica consiste en la creación de un Cluster de Raspberrys con el fin de ejecutar contenedores en el mismo. El hecho de utilizar un cluster nos va a proporcionar ventajas como **Alta Disponibilidad** o **Escalabilidad** en nuestro sistema, de modo que el servicio que estemos ejecutando en un contenedor esté siempre disponible aunque caiga alguno de los nodos del cluster, y que además sea sencillo de escalar (ampliar) la capacidad de respuesta del servicio para satisfacer necesidades.
 
@@ -56,40 +65,46 @@ Tenemos 2 opciones para cambiar el nombre de las máquinas. La primera opción e
     $ sudo raspi-config
 
 La segunda opción es optar por cambiar directamente el nombre de la máquina modificando los ficheros */etc/hostname* y */etc/hosts*:
-
-    $ sudo nano /etc/hostname
-    $ sudo nano /etc/hosts
-    $ sudo reboot
+```
+sudo nano /etc/hostname
+```
+```
+sudo nano /etc/hosts
+```
+```
+sudo reboot
+```
 
 ## Creación del cluster
 ### Instalación de Docker
-Puesto que lo que vamos a crear es un cluster de Docker Swarm, comenzamos por instalar Docker en cada uno de los nodos (maestro y esclavos) que forman el cluster. Optamos por la instalación automatizada.
+Puesto que lo que vamos a crear es un cluster de Docker Swarm, comenzamos por instalar Docker en cada uno de los nodos (maestro y esclavos) que forman el cluster. Optamos por la instalación automatizada que ya conocemos.
 
 En primer lugar abrimos sesión con el usuario *root*:
 
-    $ sudo su
+    sudo su
 
 A continuación descargamos el script de instalación y lo ejecutamos:
 
-    # curl –fsSL https://get.docker.com/ | sh
+    curl –fsSL https://get.docker.com/ | sh
 
 Añadimos el usuario Pi al grupo docker:
 
-    # usermod -aG docker pi
+    usermod -aG docker pi
 
 Cerramos sesión de root:
 
-    # exit
+    exit
 
 Cerramos sesión del usuario Pi para que el cambio en el grupo tenga efecto:
 
-    $ exit
+    exit
 
 Volvemos a entrar con el usuario Pi y comprobamos que tenemos Docker instalado y funcionando:
 
-    $ docker info
+    docker info
 
-Este proceso debemos repetirlo en el resto de nodos del cluster.
+{: .warning }
+Este proceso de instalación de docker debemos repetirlo en el resto de nodos del cluster.
 
 ### Creación del cluster
 Una vez instalado Docker en todos los nodos, vamos a iniciar Docker Swarm desde el nodo maestro.

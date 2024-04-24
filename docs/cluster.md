@@ -4,6 +4,15 @@ title: Cluster
 nav_order: 15
 ---
 # Cluster de Computación Paralela
+{: .no_toc }
+
+<details open markdown="block">
+  <summary>
+    Tabla de contenidos
+  </summary>
+  {: .text-delta }
+- TOC
+{:toc}
 
 ## Computación Paralela
 Hemos visto en el proyecto anterior cómo unir varias Raspberry Pi para crear un cluster con el que conseguir una alta disponibilidad y aumentar la escalabilidad de un modo sencillo utilizando servicios ejecutándose en contenedores. En ese caso anterior hemos utilizado un orquestador de contenedores (el Docker Swarm) que nos ha facilitado enormemente la tarea de repartir los procesos entre los nodos.
@@ -27,51 +36,61 @@ Vamos a montar un cluster con 3 Raspberry Pi. No es necesario hacer nada especia
 
 En primer lugar vamos a nombrar cada nodo con un nombre único. Podemos utilizar como nombres *Maestro*, *Nodo1* y *Nodo2*. Si los nombres ya existieran en la red (de otros compañeros) utilizaremos otra combinación. Podemos utilizar los nombres que usamos en la práctica anterior o ejecutar el comando de configuración para cambiar los nombres en cada uno de los nodos:
 
-    $ sudo raspi-config
+    sudo raspi-config
 
 ### Instalación de las librerías necesarias
+
+{: .warning }
+Este paso de instalación de las librerías necesarias debemos hacerlo en el maestro y en todos los nodos esclavos del cluster.
+
 Para poder ejecutar los programas de demo en Python de esta práctica es necesario instalar las librerías *mpi4py* y *numpy*.
 
 La primera es la que realmente va a hacer posible la ejecución de los programas en paralelo. El paquete nos instala las librerías de python y también las utilidades necesarias para la ejecución.
-
-    $ sudo apt-get update
-    $ sudo apt-get install -y python-mpi4py python-numpy
-
-**La instalación debemos hacerla en el maestro y en todos los nodos esclavos del cluster.**
+```
+sudo apt update
+```
+```
+sudo apt install -y python3-mpi4py python3-numpy
+```
 
 ### Instalación de Git y descarga del repositorio de programas
+
+{: .warning }
+Este paso debemos hacerlo en el maestro y en todos los nodos esclavos del cluster.
+
 El siguiente paso será descargarnos los programas en Python de prueba. Puesto que están en un repositorio de Git, vamos a instalar en primer lugar el programa de gestión de versiones Git.
 
-    $ sudo apt-get install git
+    sudo apt-get install git
 
 Descargamos el repositorio:
 
-    $ git clone https://github.com/jrpellicer/mpi4py.git
+    git clone https://github.com/jrpellicer/mpi4py.git
 
 Comprobamos con un ls que tenemos el directorio creado y los contenidos descargados:
 
-    $ ls ./mpi4py/
+    ls ./mpi4py/
     helloworld.py  LICENSE  primos.py  README.md
 
-**Este paso también debemos hacerlo en el nodo maestro y esclavos.**
+## Preparación del Nodo Maestro
+
+{: .warning }
+Estos pasos los vamos a realizar **únicamente en el nodo maestro**. En los nodos esclavos no hace falta hacer nada.
 
 ### Instalación y configuración de SSH
 El siguiente paso sería instalar el paquete *ssh-server*, pero no es necesario puesto que ya lo tenemos instalado, de lo contrario no podríamos estar conectados por SSH a cada una de las Raspberrys.
 
-Lo que sí que vamos a hacer es crear una clave pública en cada uno de los nodos. Esto sólo es necesario hacerlo en el nodo maestro, pero lo vamos a hacer en todos los nodos (también en el maestro) para que se cree automáticamente el directorio *~/.ssh* en todos los nodos:
+Lo que sí que vamos a hacer es crear un par de claves pública/privada en el nodo maestro:
 
-    $ ssh-keygen
-    (pulsamos Intro en cada una de las opciones que nos pide)
+    ssh-keygen
 
-## Preparación del Nodo Maestro
-Estos pasos los vamos a realizar **únicamente en el nodo maestro**. En los nodos esclavos no hace falta hacer nada.
+(pulsamos Intro en cada una de las opciones que nos pide)
 
 ### Creación del machinefile
 Para indicarle a MPI qué nodos componen el cluster debemos crear un fichero especificando las direcciones IP de cada uno de los nodos (incluido el maestro).
 
 El fichero lo vamos a llamar *machinefile* y lo vamos a crear en la carpeta personal del usuario *pi*. Ojo, sólo en el nodo maestro:
 
-    pi@Maestro:~ $ nano machinefile
+    nano machinefile
 
 Un contenido de ejemplo de este fichero sería:
 
@@ -86,15 +105,15 @@ Puesto que los programas en paralelo se van a lanzar desde el nodo maestro, es n
 
 Para la copia ejecutamos desde el nodo maestro, especificando la IP del Nodo1, el siguiente comando:
 
-    pi@Maestro:~ $ cat ~/.ssh/id_rsa.pub | ssh pi@192.168.1.14 "cat >> .ssh/authorized_keys"
+    pi@Maestro:~ $ ssh-copy-id -i ~/.ssh/id_rsa.pub pi@192.168.1.14
 
 Y repetimos el comando con la IP del Nodo2:
 
-    pi@Maestro:~ $ cat ~/.ssh/id_rsa.pub | ssh pi@192.168.1.15 "cat >> .ssh/authorized_keys"
+    pi@Maestro:~ $ ssh-copy-id -i ~/.ssh/id_rsa.pub pi@192.168.1.15
 
 A partir de este momento, cuando se haga un ssh desde el Maestro a los nodos esclavos con el usuario Pi, ya no será necesario poner la contraseña.
 
-## Ejecución de los prrogramas en paralelo
+## Ejecución de los programas en paralelo
 Ya estamos en condiciones de ejecutar un programa de forma paralela en el cluster. Vamos a ejecutar 2.
 
 ### Helloworld.py
