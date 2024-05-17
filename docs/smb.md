@@ -124,7 +124,7 @@ El grupo samba necesita tener permisos de lectura, escritura y ejecución en la 
 
 Y luego ya asignamos los permisos:
 
-    sudo setfacl -R -m "g:samba:rwx" /media/ disco_ext/Compartida
+    sudo setfacl -R -m "g:samba:rwx" /media/disco_ext/Compartida
 
 Sólo nos queda reiniciar el servicio para que los cambios tengan efecto:
 
